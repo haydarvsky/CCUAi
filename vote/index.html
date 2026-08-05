@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>قيّم هذا العرض - صناعة المحتوى بالذكاء الاصطناعي</title>
+<link rel="icon" type="image/png" href="../assets/img/haydar-logo.png">
+<link rel="stylesheet" href="../assets/css/theme.css">
+<style>
+html,body{overflow-x:clip}
+body{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:26px 18px 50px}
+
+header{text-align:center}
+.logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.logos img{height:48px;width:auto}
+.logos .sep{width:6px;height:6px;border-radius:50%;background:var(--orange);opacity:.6}
+header h1{font-size:28px;font-weight:800;color:var(--green);margin-top:10px}
+header h1 em{font-style:normal;color:var(--orange)}
+header p{color:var(--muted);font-size:14.5px;font-weight:700;margin-top:2px}
+
+.card{width:100%;max-width:440px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 20px;margin-top:20px;text-align:center;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;right:0;left:0;height:4px;background:var(--orange)}
+.rn{font-size:14px;color:var(--orange);font-weight:800}
+#p-name{font-size:30px;font-weight:800;color:var(--green);margin-top:4px;line-height:1.3}
+#p-title{font-size:17px;color:var(--body);font-weight:700;margin-top:2px;min-height:24px}
+.q{font-size:19px;font-weight:800;color:var(--green);margin-top:18px;line-height:1.6}
+
+.opts{display:flex;flex-direction:column;gap:12px;margin-top:18px}
+.opt{border:none;border-radius:16px;padding:17px;font-family:inherit;font-size:21px;font-weight:800;color:#fff;cursor:pointer;transition:transform .15s,opacity .2s;display:flex;align-items:center;justify-content:center;gap:10px}
+.opt:active{transform:scale(.96)}
+.opt.yes{background:#1E7A46}
+.opt.mid{background:#E9A94F;color:#5C3A00}
+.opt.no{background:#B4513E}
+.opt:disabled{opacity:.45;cursor:default}
+
+#state{margin-top:16px;font-size:16px;font-weight:700;color:var(--muted);min-height:26px}
+#state.ok{color:#1E7A46}
+
+#waiting{display:none;margin-top:8px}
+#waiting.on{display:block}
+#waiting .pulse{width:14px;height:14px;border-radius:50%;background:var(--orange);margin:14px auto 0;animation:pulse-ring 1.8s infinite}
+</style>
+</head>
+<body>
+<header>
+  <div class="logos">
+    <img src="../assets/img/haydar-logo.png" alt="حيدر المعاتيق">
+    <div class="sep"></div>
+    <img src="../assets/img/gocode.png" alt="GoCode">
+  </div>
+  <h1>قيّم <em>هذا العرض</em></h1>
+  <p>دورة صناعة المحتوى بالذكاء الاصطناعي ✦ GoCode</p>
+</header>
+
+<div class="card">
+  <div class="rn" id="rn">-</div>
+  <div id="p-name">بانتظار بدء الجولة…</div>
+  <div id="p-title"></div>
+  <div id="waiting" class="on"><div class="pulse"></div></div>
+  <div class="q">هل هذا المحتوى يعكس فعلاً<br>هوية الصوت المكتوبة؟</div>
+  <div class="opts">
+    <button class="opt yes" data-c="yes">نعم بوضوح ✅</button>
+    <button class="opt mid" data-c="mid">جزئياً 🤔</button>
+    <button class="opt no" data-c="no">لا ❌</button>
+  </div>
+  <div id="state"></div>
+</div>
+
+<script src="config.js"></script>
+<script>
+const AR=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+/* معرّف جهاز محلي لمنع تكرار التصويت بنفس الجولة */
+let dev=localStorage.getItem('cc-dev');
+if(!dev){dev=Math.random().toString(36).slice(2,10);localStorage.setItem('cc-dev',dev);}
+
+let round=null,sending=false;
+const btns=[...document.querySelectorAll('.opt')];
+const stEl=document.getElementById('state');
+
+function votedThis(){return localStorage.getItem('cc-voted-r')===String(round);}
+function refreshButtons(){
+  const dis=round===null||votedThis()||sending;
+  btns.forEach(b=>b.disabled=dis);
+  if(round!==null&&votedThis()){stEl.textContent='شكراً! تم تسجيل صوتك لهذه الجولة 🙌';stEl.classList.add('ok');}
+  else if(round!==null){stEl.textContent='';stEl.classList.remove('ok');}
+}
+
+async function pollState(){
+  try{
+    const r=await fetch(V_STATE_URL);
+    if(r.status===404){round=null;show(null);return;}
+    if(!r.ok)return;
+    const d=await r.json(),f=d.fields||{};
+    const g=k=>f[k]?f[k].stringValue:'';
+    const newRound=g('round')||null;
+    show({round:newRound,name:g('name'),title:g('title')});
+    if(newRound!==round){round=newRound;refreshButtons();}
+  }catch(e){}
+}
+function show(s){
+  const nameEl=document.getElementById('p-name');
+  const wait=document.getElementById('waiting');
+  if(!s||!s.round){nameEl.textContent='بانتظار بدء الجولة…';document.getElementById('p-title').textContent='';document.getElementById('rn').textContent='-';wait.classList.add('on');refreshButtons();return;}
+  wait.classList.remove('on');
+  document.getElementById('rn').textContent='الجولة '+AR(s.round);
+  nameEl.textContent=s.name||'-';
+  document.getElementById('p-title').textContent=s.title||'';
+}
+
+btns.forEach(b=>b.addEventListener('click',async()=>{
+  if(round===null||votedThis()||sending)return;
+  sending=true;refreshButtons();
+  stEl.textContent='جارٍ الإرسال…';
+  const S=v=>({stringValue:v});
+  let ok=false;
+  for(let i=0;i<3&&!ok;i++){
+    try{
+      const r=await fetch(V_POST_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({fields:{session:S(V_CONFIG.VOTES_SESSION),round:S(String(round)),choice:S(b.dataset.c),dev:S(dev),ts:S(new Date().toISOString())}})});
+      ok=r.ok;
+    }catch(e){}
+    if(!ok)await new Promise(res=>setTimeout(res,800*(i+1)));
+  }
+  sending=false;
+  if(ok)localStorage.setItem('cc-voted-r',String(round));
+  else{stEl.textContent='تعذّر الإرسال - حاول مرة ثانية';}
+  refreshButtons();
+}));
+
+refreshButtons();
+pollState();setInterval(pollState,2500);
+</script>
+</body>
+</html>

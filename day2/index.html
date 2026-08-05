@@ -3,31 +3,624 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>اليوم الثاني - صناعة المحتوى بالذكاء الاصطناعي</title>
+<title>اليوم الثاني - لبراندك صوت | صناعة المحتوى بالذكاء الاصطناعي</title>
 <link rel="stylesheet" href="../assets/css/theme.css">
 <link rel="icon" type="image/png" href="../assets/img/haydar-logo.png">
 <style>
-body{min-height:100vh;display:flex;align-items:center;justify-content:center;overflow-x:hidden}
-.orn{position:fixed;border-radius:50%;pointer-events:none}
+html,body{height:100%;overflow:hidden}
+
+#stage-wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#stage{width:1280px;height:720px;position:relative;transform-origin:center center;background:var(--cream)}
+
+.slide{position:absolute;inset:0;padding:56px 72px;display:none;flex-direction:column;align-items:center;justify-content:center}
+.slide.active{display:flex}
+.slide.active .a{animation:rise .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,0s)}
+
+.orn{position:absolute;border-radius:50%;pointer-events:none}
 .orn.o1{width:340px;height:340px;border:1.5px solid var(--line);top:-120px;left:-120px;opacity:.55}
 .orn.o2{width:220px;height:220px;border:1.5px dashed var(--line);bottom:-70px;right:-70px;opacity:.5}
-.box{text-align:center;padding:40px 24px;position:relative;z-index:1}
-.num{width:96px;height:96px;border-radius:50%;background:var(--green);color:var(--cream);font-weight:800;font-size:46px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;animation:pulse-ring 2.4s 1s infinite}
-h1{font-family:'Sakkal Saad Poster';font-weight:400;font-size:64px;color:var(--green);line-height:1.2}
-.soon{display:inline-block;margin-top:18px;background:var(--orange-soft);color:var(--orange);font-weight:800;font-size:24px;border-radius:100px;padding:10px 36px;border:1.5px dashed var(--orange)}
-p{margin-top:16px;font-size:21px;color:var(--body)}
-.back{display:inline-flex;align-items:center;gap:10px;margin-top:34px;color:var(--cream);background:var(--green);text-decoration:none;font-weight:700;font-size:20px;border-radius:100px;padding:12px 34px;transition:transform .25s ease}
-.back:hover{transform:translateY(-3px)}
+.orn.o3{width:14px;height:14px;background:var(--orange);opacity:.25;top:120px;right:180px}
+.orn.o4{width:9px;height:9px;background:var(--green);opacity:.2;bottom:150px;left:210px}
+
+.kicker{font-weight:700;color:var(--orange);font-size:24px;letter-spacing:.5px}
+.slide-title{font-weight:800;color:var(--green);font-size:46px;line-height:1.25}
+.title-row{display:flex;align-items:center;gap:22px;margin-bottom:8px}
+.title-row .tline{height:2px;width:110px;background:var(--orange);transform-origin:center;animation:growline .9s .35s both}
+.hook-big{font-size:54px;font-weight:800;color:var(--green);text-align:center;line-height:1.45}
+.hook-big em{font-style:normal;color:var(--orange)}
+.hook-sub{font-size:25px;margin-top:14px;color:var(--body);text-align:center;line-height:1.7}
+
+/* cover */
+.cov-grid{display:grid;grid-template-columns:1.12fr .88fr;align-items:center;width:1160px;gap:20px}
+.cov-text{text-align:center}
+.cover-kicker{font-size:24px;color:var(--orange);font-weight:700;margin-top:16px}
+.cover-title{font-family:'Sakkal Saad Poster';font-weight:400;font-size:104px;color:var(--green);line-height:1.15;margin:2px 0 4px}
+.cover-lines{display:flex;align-items:center;justify-content:center;gap:24px;margin:22px 0 14px}
+.cover-lines .l{height:2px;width:150px;background:var(--orange);transform-origin:center;animation:growline 1s .5s both}
+.cover-lines .dot{width:9px;height:9px;border-radius:50%;background:var(--orange);animation:pop .6s .9s both}
+.cover-sub{font-size:24px;color:var(--body);line-height:1.7}
+.ph-wrap{position:relative;width:440px;height:492px;margin:0 auto}
+.ph-ring{position:absolute;bottom:6px;left:50%;margin-left:-204px;width:404px;height:404px;border-radius:50%;border:2px dashed var(--orange);opacity:.5;animation:spin-slow 36s linear infinite}
+.ph-circle{position:absolute;bottom:20px;left:50%;margin-left:-188px;width:376px;height:376px;border-radius:50%;background:var(--card);border:1.5px solid var(--line)}
+.ph-clip{position:absolute;bottom:22px;left:50%;margin-left:-186px;width:372px;height:462px;border-radius:0 0 186px 186px;overflow:hidden}
+.ph-clip img{position:absolute;bottom:0;left:50%;margin-left:-212px;width:424px;filter:drop-shadow(0 14px 22px rgba(8,53,40,.18))}
+.ph-name{margin-top:12px;color:var(--green);font-weight:800;font-size:31px}
+.ph-badge{display:inline-block;margin-top:8px;background:var(--orange);color:#fff;font-weight:700;font-size:17.5px;border-radius:100px;padding:7px 26px;box-shadow:0 8px 20px rgba(217,119,6,.3)}
+
+/* البطاقات القلابة */
+.fq-grid{display:grid;gap:22px;margin-top:26px}
+.fq{perspective:1200px;cursor:pointer}
+.fq-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.fq.open .fq-inner{transform:rotateY(180deg)}
+.fq-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px 24px;text-align:center}
+.fq-front{background:#fff;border:1.5px solid var(--line)}
+.fq-front .post{font-size:19.5px;color:var(--body);line-height:1.8}
+.fq-front .hint{margin-top:14px;font-size:14.5px;color:var(--orange);font-weight:700}
+.fq-front .bn{font-size:27px;font-weight:800;color:var(--green)}
+.fq-front .bq{font-size:17px;color:var(--muted);font-weight:700;margin-top:8px;line-height:1.6}
+.fq-back{transform:rotateY(180deg);background:var(--fc);color:#fff}
+.fq-back .av{width:60px;height:60px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:30px;margin-bottom:10px}
+.fq-back .nm{font-size:23px;font-weight:800;line-height:1.35}
+.fq-back .tip{font-size:16px;margin-top:8px;opacity:.92;line-height:1.65}
+
+/* mind-vs (أمس/اليوم) */
+.mind-vs{display:grid;grid-template-columns:1fr 1fr;gap:24px;width:1000px;margin-top:40px}
+.mv{border-radius:18px;padding:24px 28px;text-align:center}
+.mv.today{background:var(--green);color:var(--cream)}
+.mv.rest{background:var(--card);border:1px solid var(--line)}
+.mv .tag{display:inline-block;border-radius:100px;padding:4px 18px;font-weight:700;font-size:16px;margin-bottom:8px}
+.mv.today .tag{background:rgba(250,246,239,.15);color:#E9A94F}
+.mv.rest .tag{background:var(--orange-soft);color:var(--orange)}
+.mv h3{font-size:30px;font-weight:800}
+.mv.rest h3{color:var(--green)}
+.mv p{font-size:19px;margin-top:6px;line-height:1.6}
+.mv.today p{color:#D5DCD8}
+.mv.rest p{color:var(--body)}
+
+/* توليد × تحرير */
+.vs-wrap{display:grid;grid-template-columns:1fr 84px 1fr;gap:0;width:1120px;align-items:stretch;margin-top:34px}
+.vs-col{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px 30px}
+.vs-col.ai{background:var(--green);border-color:var(--green)}
+.vs-col h3{font-size:26px;font-weight:800;color:var(--green);margin-bottom:14px}
+.vs-col.ai h3{color:var(--cream)}
+.vs-col ul{list-style:none}
+.vs-col li{display:flex;gap:12px;align-items:flex-start;font-size:19.5px;line-height:1.55;padding:7px 0;color:var(--body)}
+.vs-col.ai li{color:#D5DCD8}
+.vs-col li .mark{font-weight:800;min-width:22px;text-align:center;color:var(--orange)}
+.vs-col.ai li .mark{color:#E9A94F}
+.vs-mid{display:flex;align-items:center;justify-content:center}
+.vs-badge{width:64px;height:64px;border-radius:50%;background:var(--orange);color:#fff;font-weight:800;font-size:21px;display:flex;align-items:center;justify-content:center;animation:pulse-ring 2.2s 1.4s infinite}
+.vs-punch{margin-top:24px;font-size:24px;font-weight:800;color:var(--green);text-align:center}
+.vs-punch em{font-style:normal;color:var(--orange)}
+
+/* دورة الإنتاج */
+.pipe{display:flex;align-items:stretch;gap:0;width:1140px;margin-top:44px;justify-content:center}
+.pstep{flex:1;text-align:center;position:relative;padding:0 8px}
+.pstep .ic{width:84px;height:84px;border-radius:50%;background:var(--card);border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:38px;margin:0 auto}
+.pstep.hot .ic{background:var(--green);border-color:var(--green)}
+.pstep h3{font-size:23px;font-weight:800;color:var(--green);margin-top:12px}
+.pstep p{font-size:16px;color:var(--muted);font-weight:700;margin-top:4px;line-height:1.5}
+.pstep:not(:last-child)::after{content:'⟵';position:absolute;left:-14px;top:28px;font-size:26px;color:var(--orange)}
+
+/* عدسة التحليل */
+.lens-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;width:1140px;margin-top:34px}
+.lens{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 18px;text-align:center;position:relative;overflow:hidden}
+.lens:after{content:'';position:absolute;top:0;right:0;left:0;height:3.5px;background:var(--lc)}
+.lens .n{width:46px;height:46px;border-radius:50%;background:var(--lc);color:#fff;font-weight:800;font-size:22px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.lens h4{color:var(--green);font-weight:800;font-size:22px;line-height:1.35}
+.lens p{font-size:16px;color:var(--body);margin-top:8px;line-height:1.6}
+
+/* براندي */
+.me-grid{display:grid;grid-template-columns:340px 1fr;gap:34px;width:1130px;align-items:center;margin-top:24px}
+.me-card{background:var(--green);border-radius:22px;padding:28px 26px;text-align:center;color:var(--cream)}
+.me-card img{width:150px;border-radius:50%;background:var(--card)}
+.me-card .nm{font-size:26px;font-weight:800;margin-top:10px}
+.me-tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:12px}
+.me-tags span{background:rgba(250,246,239,.12);border:1px solid rgba(250,246,239,.25);color:#E9A94F;border-radius:100px;padding:5px 16px;font-size:15.5px;font-weight:700}
+.qs{display:flex;flex-direction:column;gap:13px}
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 22px;display:flex;gap:14px;align-items:center}
+.qcard .num{min-width:36px;height:36px;border-radius:50%;background:var(--cc);color:#fff;font-weight:800;font-size:18px;display:flex;align-items:center;justify-content:center}
+.qcard p{font-size:19px;color:var(--body);line-height:1.5}
+.qcard p b{color:var(--green)}
+
+/* بطاقة هوية الصوت */
+.vc-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px;width:1120px;margin-top:26px;align-items:stretch}
+.vcard{border-radius:20px;padding:24px 28px;position:relative;overflow:hidden}
+.vcard.ex{background:var(--card);border:1px solid var(--line)}
+.vcard.mine{background:#fff;border:2px dashed var(--orange)}
+.vcard h3{font-size:21px;font-weight:800;color:var(--green);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.vrow{display:flex;gap:12px;padding:9px 0;border-bottom:1px dashed var(--line);align-items:baseline}
+.vrow:last-child{border-bottom:none}
+.vrow .k{min-width:130px;font-weight:800;color:var(--orange);font-size:17.5px}
+.vrow .v{font-size:17.5px;color:var(--body);line-height:1.6}
+.vcard.mine .v{color:var(--muted)}
+
+/* استراحة */
+.brk-cup{font-size:120px;line-height:1;animation:floaty 4s ease-in-out infinite}
+.brk-title{font-family:'Sakkal Saad Poster';font-weight:400;font-size:96px;color:var(--green);margin-top:10px}
+.brk-sub{font-size:26px;color:var(--body);margin-top:8px}
+
+/* أنواع المحتوى */
+.types{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;width:1150px;margin-top:34px}
+.tp{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 14px;text-align:center;position:relative;overflow:hidden}
+.tp:after{content:'';position:absolute;top:0;right:0;left:0;height:3.5px;background:var(--lc,var(--orange))}
+.tp .em{font-size:42px;line-height:1}
+.tp h4{color:var(--green);font-weight:800;font-size:21px;margin-top:10px}
+.tp p{font-size:15px;color:var(--muted);margin-top:5px;line-height:1.55;font-weight:700}
+
+/* خطوات التطبيق */
+.fx-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;width:1160px;margin-top:34px}
+.fx{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 14px;text-align:center}
+.fx .n{width:50px;height:50px;border-radius:50%;background:var(--green);color:var(--cream);font-weight:800;font-size:23px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.fx h3{color:var(--green);font-size:19px;font-weight:800;line-height:1.4}
+.fx p{font-size:15px;color:var(--body);margin-top:6px;line-height:1.55}
+.lumen-note{margin-top:26px;background:var(--orange-soft);border:1.5px dashed var(--orange);border-radius:100px;padding:11px 34px;font-size:18.5px;font-weight:700;color:var(--orange)}
+
+/* التصويت */
+.ice-grid{display:grid;grid-template-columns:1fr 380px;gap:44px;width:1120px;align-items:center;margin-top:26px}
+.ice-steps{display:flex;flex-direction:column;gap:16px}
+.ice-step{display:flex;gap:18px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 24px}
+.ice-step .n{min-width:50px;height:50px;border-radius:50%;background:var(--green);color:var(--cream);font-weight:800;font-size:24px;display:flex;align-items:center;justify-content:center}
+.ice-step h3{color:var(--green);font-size:22px;font-weight:800}
+.ice-step p{font-size:17px;color:var(--body);margin-top:2px}
+.qr-card{background:#fff;border:1.5px solid var(--line);border-radius:22px;padding:24px;text-align:center;box-shadow:0 18px 40px rgba(8,53,40,.10)}
+.qr-card img{width:270px;height:270px;display:block;margin:0 auto}
+.qr-url{direction:ltr;font-family:Arial,'Sakkal Saad';font-weight:700;font-size:18px;color:var(--orange);margin-top:12px}
+.vbtns{display:flex;gap:12px;margin-top:18px}
+.scr-btn{display:inline-flex;align-items:center;gap:8px;background:var(--green);color:var(--cream);text-decoration:none;font-weight:700;font-size:17px;border-radius:100px;padding:10px 24px;transition:transform .2s}
+.scr-btn:hover{transform:translateY(-3px)}
+.scr-btn.alt{background:var(--orange)}
+.vops{display:flex;gap:10px;margin-top:16px}
+.vop{border-radius:100px;padding:8px 22px;font-weight:800;font-size:16.5px;color:#fff}
+.vop.y{background:#1E7A46}.vop.m{background:#E9A94F;color:#5C3A00}.vop.n{background:#B4513E}
+
+/* الختام */
+.close-title{font-family:'Sakkal Saad Poster';font-weight:400;font-size:96px;color:var(--green)}
+.close-sub{font-size:26px;color:var(--body);margin-top:10px;line-height:1.8;text-align:center}
+.close-sub em{font-style:normal;color:var(--orange);font-weight:700}
+.close-tmw{margin-top:26px;background:var(--green);color:var(--cream);border-radius:18px;padding:18px 40px;font-size:22px;font-weight:700}
+.close-tmw b{color:#E9A94F}
+.close-logos{display:flex;align-items:center;gap:26px;margin-bottom:6px}
+.close-logos img{height:74px;animation:floaty 5s ease-in-out infinite}
+.close-logos .dv{width:1.5px;height:56px;background:var(--line)}
+
+/* navigation */
+#progress{position:fixed;top:0;right:0;height:4px;background:var(--orange);z-index:60;transition:width .45s cubic-bezier(.2,.7,.2,1)}
+#nav{position:fixed;bottom:18px;left:26px;display:flex;gap:10px;z-index:60}
+#nav button{width:46px;height:46px;border-radius:50%;border:1.5px solid var(--line);background:var(--cream);color:var(--green);font-size:21px;cursor:pointer;transition:.25s;font-family:inherit}
+#nav button:hover{background:var(--orange);border-color:var(--orange);color:#fff}
+#dots{position:fixed;bottom:32px;right:50%;transform:translateX(50%);display:flex;gap:9px;z-index:60}
+#dots span{width:9px;height:9px;border-radius:50%;background:var(--line);cursor:pointer;transition:.3s}
+#dots span.on{background:var(--orange);transform:scale(1.35)}
+#counter{position:fixed;bottom:26px;right:30px;color:var(--muted);font-size:17px;z-index:60}
 </style>
 </head>
 <body>
-<div class="orn o1"></div><div class="orn o2"></div>
-<div class="box">
-  <div class="num a" style="--d:.1s">٢</div>
-  <h1 class="a" style="--d:.2s">اليوم الثاني</h1>
-  <div class="a" style="--d:.35s"><span class="soon">قريباً ✦ السلايدات قيد الإعداد</span></div>
-  <p class="a" style="--d:.5s">دورة صناعة المحتوى بالذكاء الاصطناعي - Content Creation Using AI</p>
-  <a class="back a" style="--d:.65s" href="../">العودة للصفحة الرئيسية</a>
+<div id="progress"></div>
+<div id="stage-wrap"><div id="stage">
+
+<!-- ═══════════ S1 الغلاف ═══════════ -->
+<section class="slide" data-name="الغلاف">
+  <div class="orn o1"></div><div class="orn o2"></div><div class="orn o3"></div><div class="orn o4"></div>
+  <div class="cov-grid">
+    <div class="cov-text">
+      <div class="a" style="--d:.05s;display:flex;align-items:center;gap:22px;justify-content:center">
+        <img style="width:64px" src="../assets/img/haydar-logo.png" alt="">
+        <div style="width:1.5px;height:52px;background:var(--line)"></div>
+        <img style="width:84px" src="../assets/img/gocode.png" alt="">
+      </div>
+      <div class="cover-kicker a" style="--d:.25s">دورة صناعة المحتوى بالذكاء الاصطناعي ✦ اليوم الثاني</div>
+      <h1 class="cover-title a" style="--d:.4s">لبراندك<br>صوت</h1>
+      <div class="cover-lines"><div class="l"></div><div class="dot"></div><div class="l"></div></div>
+      <p class="cover-sub a" style="--d:.6s">اليوم نكتشف صوت براندك…<br>وننتج أول محتوى حقيقي جاهز للنشر</p>
+    </div>
+    <div class="cov-photo">
+      <div class="ph-wrap">
+        <div class="ph-ring"></div>
+        <div class="ph-circle a" style="--d:.35s;animation-name:pop"></div>
+        <div class="ph-clip a" style="--d:.55s"><img src="../assets/img/haydar.webp" alt=""></div>
+      </div>
+      <div class="ph-name a" style="--d:.85s">أ. حيدر المعاتيق</div>
+      <div class="ph-badge a" style="--d:1.05s">مدرب دولي معتمد في الذكاء الاصطناعي</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ S2 خمن الهوية ═══════════ -->
+<section class="slide" data-name="خمن الهوية" style="padding-top:44px;justify-content:flex-start">
+  <div class="orn o3"></div>
+  <div class="title-row a" style="margin-top:4px"><div class="tline"></div><h2 class="slide-title">خمِّن الهوية 🕵️</h2><div class="tline"></div></div>
+  <p class="hook-sub a" style="--d:.15s;margin-top:0;font-size:22px">ثلاثة منشورات لنفس المقهى بالضبط… لو هالمقهى شخص، وش شخصيته؟ ومين زبونه؟</p>
+  <div class="fq-grid" style="grid-template-columns:repeat(3,1fr);width:1160px;height:330px">
+    <div class="fq a" style="--d:.3s;--fc:#083528">
+      <div class="fq-inner">
+        <div class="fq-face fq-front">
+          <p class="post">«نلتزم في دار البُن بأعلى معايير الجودة، من اختيار الحبة إلى فنجانك. خبرة تحميصٍ تمتد لعشر سنوات.»</p>
+          <span class="hint">خمِّن الشخصية… ثم اضغط</span>
+        </div>
+        <div class="fq-face fq-back">
+          <div class="av">🎩</div>
+          <div class="nm">الخبير الموثوق</div>
+          <p class="tip">نبرة رسمية هادئة - زبونه يدفع مقابل الضمان والخبرة</p>
+        </div>
+      </div>
+    </div>
+    <div class="fq a" style="--d:.5s;--fc:#D97706">
+      <div class="fq-inner">
+        <div class="fq-face fq-front">
+          <p class="post">«قهوتنا ما تحتاج فلتر… صراحة أنت اللي تحتاج قهوتنا 😌 جرّب وبتفهم ليش الدوام صار يمر أسرع.»</p>
+          <span class="hint">خمِّن الشخصية… ثم اضغط</span>
+        </div>
+        <div class="fq-face fq-back">
+          <div class="av">😎</div>
+          <div class="nm">الصديق الساخر</div>
+          <p class="tip">نبرة جريئة فكاهية - زبونه شاب يحب الخفة والتجربة</p>
+        </div>
+      </div>
+    </div>
+    <div class="fq a" style="--d:.7s;--fc:#B4513E">
+      <div class="fq-inner">
+        <div class="fq-face fq-front">
+          <p class="post">«كل صباح، نحمّص قهوتنا كأنها لضيوف بيتنا. تفضّلوا… مكانكم محجوز دايماً.»</p>
+          <span class="hint">خمِّن الشخصية… ثم اضغط</span>
+        </div>
+        <div class="fq-face fq-back">
+          <div class="av">🏡</div>
+          <div class="nm">أهل البيت الكرماء</div>
+          <p class="tip">نبرة دافئة عائلية - زبونه يبحث عن المكان اللي «يحسّه بيته»</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ S3 الكشف ═══════════ -->
+<section class="slide" data-name="هذا هو Brand Voice">
+  <div class="orn o1"></div><div class="orn o4"></div>
+  <h2 class="hook-big a">نفس المنتج بالضبط…<br>تغيّرت الكلمات <em>فتغيّرت الشخصية</em></h2>
+  <p class="hook-sub a" style="--d:.3s">هذا اسمه <b style="color:var(--orange);font-family:Arial,'Sakkal Saad'">Brand Voice</b> - صوت البراند<br>وهو موضوعنا الأساسي اليوم</p>
+</section>
+
+<!-- ═══════════ S4 أمس واليوم ═══════════ -->
+<section class="slide" data-name="أمس واليوم">
+  <div class="orn o2"></div><div class="orn o3"></div>
+  <div class="kicker a">وين وصلنا؟</div>
+  <h2 class="slide-title a" style="--d:.15s">أمس فكّرنا… اليوم ننتج</h2>
+  <div class="mind-vs">
+    <div class="mv rest a" style="--d:.35s">
+      <span class="tag">أمس</span>
+      <h3>العقل 🧠</h3>
+      <p>تعلمنا نفكر مع الذكاء الاصطناعي<br>وبنينا برومبت العناصر السبعة</p>
+    </div>
+    <div class="mv today a" style="--d:.55s">
+      <span class="tag">اليوم</span>
+      <h3>الإنتاج 🎬</h3>
+      <p>من الفكرة إلى محتوى جاهز ننشره فعلاً<br>بصوتٍ يخص براندك وحده</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ S5 توليد × تحرير ═══════════ -->
+<section class="slide" data-name="توليد وتحرير">
+  <div class="orn o1"></div><div class="orn o3"></div>
+  <div class="title-row a"><div class="tline"></div><h2 class="slide-title">توليد… أم تحرير؟</h2><div class="tline"></div></div>
+  <div class="vs-wrap">
+    <div class="vs-col a" style="--d:.25s">
+      <h3>✍️ توليد محتوى</h3>
+      <ul>
+        <li><span class="mark">✦</span>تبدأ من صفحة بيضاء - الـAI يكتب المسودة الأولى</li>
+        <li><span class="mark">✦</span>أنت توجّه بالبرومبت وتحكم على الناتج</li>
+        <li><span class="mark">✦</span>مثاله: «اكتب لي منشوراً عن عرض رمضان»</li>
+      </ul>
+    </div>
+    <div class="vs-mid a" style="--d:.55s"><div class="vs-badge">×</div></div>
+    <div class="vs-col ai a" style="--d:.4s">
+      <h3>🪄 تحرير محتوى</h3>
+      <ul>
+        <li><span class="mark">✦</span>تبدأ من نصك أنت - والـAI يحسّنه</li>
+        <li><span class="mark">✦</span>يختصر، يعيد الصياغة، يبدّل النبرة</li>
+        <li><span class="mark">✦</span>مثاله: «خذ منشوري وخلّه أقصر وأجرأ»</li>
+      </ul>
+    </div>
+  </div>
+  <p class="vs-punch a" style="--d:.7s">المحترف يستخدم الاثنين… <em>والصوت واحد في الحالتين</em></p>
+</section>
+
+<!-- ═══════════ S6 دورة الإنتاج ═══════════ -->
+<section class="slide" data-name="دورة الإنتاج">
+  <div class="orn o2"></div><div class="orn o4"></div>
+  <div class="title-row a"><div class="tline"></div><h2 class="slide-title">دورة إنتاج المحتوى</h2><div class="tline"></div></div>
+  <div class="pipe">
+    <div class="pstep a" style="--d:.2s"><div class="ic">💡</div><h3>فكرة</h3><p>من عصفك الذهني<br>أمس</p></div>
+    <div class="pstep a" style="--d:.35s"><div class="ic">📝</div><h3>برومبت</h3><p>العناصر السبعة<br>+ صوت البراند</p></div>
+    <div class="pstep a" style="--d:.5s"><div class="ic">📄</div><h3>مسودة</h3><p>الـAI يولّد<br>النسخة الأولى</p></div>
+    <div class="pstep a" style="--d:.65s"><div class="ic">✂️</div><h3>تعديل</h3><p>أنت تراجع<br>وتحاوره ليحسّن</p></div>
+    <div class="pstep hot a" style="--d:.8s"><div class="ic">🚀</div><h3>إخراج نهائي</h3><p>محتوى جاهز<br>للنشر</p></div>
+  </div>
+  <p class="hook-sub a" style="--d:1s;margin-top:40px">كل خطوة هنا تقف على <b style="color:var(--orange)">إطار العناصر السبعة</b> اللي أتقنّاه أمس</p>
+</section>
+
+<!-- ═══════════ S7 عدسة التحليل ═══════════ -->
+<section class="slide" data-name="عدسة التحليل">
+  <div class="orn o3"></div>
+  <div class="kicker a">الإطار النظري 🔍</div>
+  <h2 class="slide-title a" style="--d:.15s">عدسة تحليل الصوت - ٤ عناصر</h2>
+  <div class="lens-grid">
+    <div class="lens a" style="--d:.3s;--lc:#D97706">
+      <div class="n">١</div>
+      <h4>الشخصية</h4>
+      <p>لو كان البراند إنساناً…<br>شنو طبعه؟</p>
+    </div>
+    <div class="lens a" style="--d:.45s;--lc:#1E7A46">
+      <div class="n">٢</div>
+      <h4>المفردات المتكررة</h4>
+      <p>أي كلمات يرددها دائماً<br>وأيها لا يقولها أبداً؟</p>
+    </div>
+    <div class="lens a" style="--d:.6s;--lc:#B4513E">
+      <div class="n">٣</div>
+      <h4>طول الجمل وإيقاعها</h4>
+      <p>جمل قصيرة حادة…<br>أم طويلة مسترسلة؟</p>
+    </div>
+    <div class="lens a" style="--d:.75s;--lc:#083528">
+      <div class="n">٤</div>
+      <h4>الرسمية والفكاهة</h4>
+      <p>وين يقف على الخط<br>بين الجدية والمزاح؟</p>
+    </div>
+  </div>
+  <p class="hook-sub a" style="--d:.95s;margin-top:28px">بهذه العدسة الواحدة… راح نحلل كل البراندات الجاية</p>
+</section>
+
+<!-- ═══════════ S8 براندات عالمية ═══════════ -->
+<section class="slide" data-name="براندات عالمية" style="padding-top:44px;justify-content:flex-start">
+  <div class="orn o3"></div>
+  <div class="title-row a" style="margin-top:4px"><div class="tline"></div><h2 class="slide-title">لو كان إنساناً… شنو طبعه؟</h2><div class="tline"></div></div>
+  <p class="hook-sub a" style="--d:.1s;margin-top:0;font-size:21px">حللوا معي - وبعد كل براند اسألوا: لو غيّر نبرته فجأة، وش بيصير؟</p>
+  <div class="fq-grid" style="grid-template-columns:repeat(4,1fr);width:1160px;height:300px">
+    <div class="fq a" style="--d:.25s;--fc:#1E7A46">
+      <div class="fq-inner">
+        <div class="fq-face fq-front">
+          <div class="bn" style="font-family:Arial,'Sakkal Saad'">Duolingo</div>
+          <p class="bq">تطبيق تعلم اللغات<br>صاحب البومة الخضراء</p>
+          <span class="hint">خمِّن ثم اضغط</span>
+        </div>
+        <div class="fq-face fq-back">
+          <div class="av">🦉</div>
+          <div class="nm">جريء فكاهي<br>«مزعج» بذكاء</div>
+          <p class="tip">كسر الرسمية ممكن يكون استراتيجية كاملة</p>
+        </div>
+      </div>
+    </div>
+    <div class="fq a" style="--d:.4s;--fc:#083528">
+      <div class="fq-inner">
+        <div class="fq-face fq-front">
+          <div class="bn" style="font-family:Arial,'Sakkal Saad'">Apple</div>
+          <p class="bq">شركة التقنية<br>الأشهر في العالم</p>
+          <span class="hint">خمِّن ثم اضغط</span>
+        </div>
+        <div class="fq-face fq-back">
+          <div class="av">🍎</div>
+          <div class="nm">واثق هادئ<br>ما يشرح كثير</div>
+          <p class="tip">قوة الصوت أحياناً… في السكوت</p>
+        </div>
+      </div>
+    </div>
+    <div class="fq a" style="--d:.55s;--fc:#D97706">
+      <div class="fq-inner">
+        <div class="fq-face fq-front">
+          <div class="bn" style="font-family:Arial,'Sakkal Saad'">Innocent</div>
+          <p class="bq">عصائر طبيعية<br>بريطانية</p>
+          <span class="hint">خمِّن ثم اضغط</span>
+        </div>
+        <div class="fq-face fq-back">
+          <div class="av">🍓</div>
+          <div class="nm">صديقك المرح</div>
+          <p class="tip">علاقة شخصية حميمة… حتى بمنتج بسيط زي العصير</p>
+        </div>
+      </div>
+    </div>
+    <div class="fq a" style="--d:.7s;--fc:#B4513E">
+      <div class="fq-inner">
+        <div class="fq-face fq-front">
+          <div class="bn">علامة فخمة</div>
+          <p class="bq">ساعات سويسرية<br>أو سيارات فارهة</p>
+          <span class="hint">خمِّن ثم اضغط</span>
+        </div>
+        <div class="fq-face fq-back">
+          <div class="av">⌚</div>
+          <div class="nm">رسمي فخم<br>جمل قليلة موزونة</div>
+          <p class="tip">الاختصار نفسه… أداة فخامة</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ S9 براندي أنا ═══════════ -->
+<section class="slide" data-name="براندي أنا">
+  <div class="orn o2"></div><div class="orn o4"></div>
+  <div class="kicker a">حالة نقاش حية 🎙</div>
+  <h2 class="slide-title a" style="--d:.15s">براندي أنا… حللوني بنفس العدسة</h2>
+  <div class="me-grid">
+    <div class="me-card a" style="--d:.3s">
+      <img src="../assets/img/haydar.webp" alt="">
+      <div class="nm">أ. حيدر المعاتيق</div>
+      <div class="me-tags">
+        <span>مدرب ذكاء اصطناعي</span><span>معلّم</span>
+        <span>خطّاط</span><span>منضّد كتب</span>
+      </div>
+    </div>
+    <div class="qs">
+      <div class="qcard a" style="--d:.45s;--cc:#D97706"><div class="num">١</div><p><b>الشخصية:</b> لو أنا إنسان… وش شخصيتي بعيونكم؟</p></div>
+      <div class="qcard a" style="--d:.6s;--cc:#1E7A46"><div class="num">٢</div><p><b>التناقض الظاهري:</b> ذكاء اصطناعي حديث × خط عربي تراثي - يضعف الصوت أو يقوّيه؟</p></div>
+      <div class="qcard a" style="--d:.75s;--cc:#B4513E"><div class="num">٣</div><p><b>المفردات:</b> لغتي لغة معلّم أكثر… أو مدرب تقني؟</p></div>
+      <div class="qcard a" style="--d:.9s;--cc:#083528"><div class="num">٤</div><p><b>الجمهور:</b> هل جمهور الخط هو نفسه جمهور الذكاء الاصطناعي؟</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ S10 الخلاصة ═══════════ -->
+<section class="slide" data-name="الخلاصة">
+  <div class="orn o1"></div><div class="orn o4"></div>
+  <h2 class="hook-big a">التحدي الحقيقي:<br>كيف يبان تنوّعك <em>عمقاً وقوة</em>…<br>لا تشتتاً</h2>
+  <p class="hook-sub a" style="--d:.35s">الصوت الواحد ما يعني موضوعاً واحداً - يعني شخصيةً واحدة تجمع كل المواضيع</p>
+</section>
+
+<!-- ═══════════ S11 بطاقة هوية الصوت ═══════════ -->
+<section class="slide" data-name="بطاقة هوية الصوت" style="padding-top:44px;justify-content:flex-start">
+  <div class="orn o3"></div>
+  <div class="title-row a" style="margin-top:4px"><div class="tline"></div><h2 class="slide-title">تمرينك: بطاقة هوية الصوت ✍️</h2><div class="tline"></div></div>
+  <p class="hook-sub a" style="--d:.1s;margin-top:0;font-size:21px">أربعة أسطر فقط - هذي بطاقة مشروعك الصوتية، بنستخدمها بعد الاستراحة</p>
+  <div class="vc-grid">
+    <div class="vcard ex a" style="--d:.3s">
+      <h3>📋 مثال: محمصة «بُن الديرة»</h3>
+      <div class="vrow"><span class="k">الشخصية</span><span class="v">الصديق الخبير - يفهم بالقهوة ويحبها بجنون</span></div>
+      <div class="vrow"><span class="k">النبرة</span><span class="v">جريئة وخفيفة، فيها فكاهة بلا استظراف</span></div>
+      <div class="vrow"><span class="k">كلمات نستخدمها</span><span class="v">محمصة طازجة، تجربة، مزاجك، «قهوتك تشبهك»</span></div>
+      <div class="vrow"><span class="k">كلمات نتجنبها</span><span class="v">الأفضل، الأرخص، حصري، عروض مجنونة</span></div>
+    </div>
+    <div class="vcard mine a" style="--d:.5s">
+      <h3>🖊 بطاقة مشروعك أنت</h3>
+      <div class="vrow"><span class="k">الشخصية</span><span class="v">لو براندك إنسان… وش طبعه؟</span></div>
+      <div class="vrow"><span class="k">النبرة</span><span class="v">رسمية؟ جريئة؟ دافئة؟ وبأي درجة؟</span></div>
+      <div class="vrow"><span class="k">كلمات نستخدمها</span><span class="v">٣-٥ كلمات تخص عالمك</span></div>
+      <div class="vrow"><span class="k">كلمات نتجنبها</span><span class="v">الكلمات المستهلكة والممنوعة عندك</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ S12 استراحة ═══════════ -->
+<section class="slide" data-name="استراحة">
+  <div class="orn o1"></div><div class="orn o2"></div><div class="orn o3"></div><div class="orn o4"></div>
+  <div class="brk-cup a">☕</div>
+  <h2 class="brk-title a" style="--d:.2s">استراحة</h2>
+  <p class="brk-sub a" style="--d:.4s">نرجع بعد ١٥ دقيقة - وبعدها إنتاج فعلي من أول دقيقة</p>
+</section>
+
+<!-- ═══════════ S13 أنواع المحتوى ═══════════ -->
+<section class="slide" data-name="أنواع المحتوى">
+  <div class="orn o2"></div><div class="orn o3"></div>
+  <div class="title-row a"><div class="tline"></div><h2 class="slide-title">مرجعك السريع - أنواع المحتوى</h2><div class="tline"></div></div>
+  <div class="types">
+    <div class="tp a" style="--d:.2s;--lc:#D97706"><div class="em">📊</div><h4>سلايدات</h4><p>شرح فكرة<br>بخطوات</p></div>
+    <div class="tp a" style="--d:.35s;--lc:#1E7A46"><div class="em">📈</div><h4>إنفوجرافيك</h4><p>تبسيط بيانات<br>بصرياً</p></div>
+    <div class="tp a" style="--d:.5s;--lc:#B4513E"><div class="em">📸</div><h4>صورة ترويجية</h4><p>عرض منتج<br>بجودة استوديو</p></div>
+    <div class="tp a" style="--d:.65s;--lc:#083528"><div class="em">🎙</div><h4>مقطع صوتي</h4><p>هوية سمعية<br>لفيديو قصير</p></div>
+    <div class="tp a" style="--d:.8s;--lc:#A1907A"><div class="em">🎬</div><h4>فيديو ترويجي</h4><p>محتوى قصير<br>بقصة</p></div>
+  </div>
+  <p class="hook-sub a" style="--d:1s;margin-top:30px">كل واحد فيكم يختار <b style="color:var(--orange)">نوعاً واحداً فقط</b> يناسب مشروعه… ويطبّقه فعلياً لين آخر الساعة</p>
+</section>
+
+<!-- ═══════════ S14 التطبيق العملي ═══════════ -->
+<section class="slide" data-name="التطبيق العملي">
+  <div class="orn o1"></div><div class="orn o4"></div>
+  <div class="kicker a">التطبيق العملي 💪</div>
+  <h2 class="slide-title a" style="--d:.15s">من البطاقة… إلى المحتوى</h2>
+  <div class="fx-steps">
+    <div class="fx a" style="--d:.3s"><div class="n">١</div><h3>ارجع لبطاقتك</h3><p>بطاقة هوية الصوت<br>من الساعة الأولى</p></div>
+    <div class="fx a" style="--d:.45s"><div class="n">٢</div><h3>اختر نوعك</h3><p>نوع محتوى واحد<br>يناسب مشروعك</p></div>
+    <div class="fx a" style="--d:.6s"><div class="n">٣</div><h3>ابنِ البرومبت</h3><p>٧ عناصر + بطاقة الصوت<br>للأسلوب والقيود</p></div>
+    <div class="fx a" style="--d:.75s"><div class="n">٤</div><h3>ولّد فعلياً</h3><p>نص أو صورة -<br>من جوالك الآن</p></div>
+    <div class="fx a" style="--d:.9s"><div class="n">٥</div><h3>أمرّ عليك</h3><p>مراجعة فردية<br>لكل مشروع</p></div>
+  </div>
+  <div class="lumen-note a" style="--d:1.1s">📸 عندك منتج مادي؟ بنفتح Lumen Pro سوا - صورة منتجك تصير صورة استوديو</div>
+  <p class="hook-sub a" style="--d:1.25s;margin-top:16px;font-size:21px">المطلوب بنهاية الوقت: <b style="color:var(--orange)">قطعة محتوى واحدة تقدر تنشرها اليوم</b></p>
+</section>
+
+<!-- ═══════════ S15 التصويت ═══════════ -->
+<section class="slide" data-name="التصويت الحي" style="padding-top:44px;justify-content:flex-start">
+  <div class="orn o2"></div><div class="orn o3"></div>
+  <div class="title-row a" style="margin-top:4px"><div class="tline"></div><h2 class="slide-title">لحظة الحقيقة - تصويت الجمهور 🗳</h2><div class="tline"></div></div>
+  <p class="hook-sub a" style="--d:.1s;margin-top:0;font-size:21px">كل متدرب يعرض مخرجه ٣٠-٤٠ ثانية… والباقي يحكمون من جوالاتهم</p>
+  <div class="ice-grid">
+    <div class="ice-steps">
+      <div class="ice-step a" style="--d:.25s"><div class="n">١</div><div><h3>اعرض محتواك على الجميع</h3><p>مع قراءة بطاقة صوتك بصوت عالٍ</p></div></div>
+      <div class="ice-step a" style="--d:.45s"><div class="n">٢</div><div><h3>الجمهور يصوّت من الجوال</h3><p>هل المحتوى يعكس فعلاً هوية الصوت المكتوبة؟</p></div></div>
+      <div class="ice-step a" style="--d:.65s"><div class="n">٣</div><div><h3>النتيجة لحظياً على الشاشة</h3><p>أعمدة حية تتحرك مع كل صوت</p></div></div>
+      <div class="vops a" style="--d:.8s">
+        <span class="vop y">نعم بوضوح ✅</span><span class="vop m">جزئياً 🤔</span><span class="vop n">لا ❌</span>
+      </div>
+      <div class="vbtns a" style="--d:.95s">
+        <a class="scr-btn" href="../vote/screen/" target="_blank">🖥 الشاشة الحية</a>
+        <a class="scr-btn alt" href="../vote/admin/" target="_blank">🎛 تحكم المدرب</a>
+      </div>
+    </div>
+    <div class="qr-card a" style="--d:.4s;animation-name:pop">
+      <img src="../assets/img/qr-vote.svg" alt="QR">
+      <div class="qr-url">haydarvsky.github.io/CCUAi/vote</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ S16 الختام ═══════════ -->
+<section class="slide" data-name="الختام">
+  <div class="orn o1"></div><div class="orn o2"></div><div class="orn o3"></div><div class="orn o4"></div>
+  <div class="close-logos a">
+    <img src="../assets/img/haydar-logo.png" style="height:80px" alt="">
+    <div class="dv"></div>
+    <img src="../assets/img/gocode.png" alt="">
+  </div>
+  <h1 class="close-title a" style="--d:.2s">صار لبراندك صوت</h1>
+  <p class="close-sub a" style="--d:.45s">بدأنا بنقاشٍ عن براندات عالمية…<br>وانتهينا وكل واحد فيكم بيده <em>محتوى حقيقي يتكلم بصوت مشروعه</em></p>
+  <div class="close-tmw a" style="--d:.7s">بكرة: من قطعة محتوى واحدة… إلى <b>حملة متكاملة</b> 🚀</div>
+</section>
+
+</div></div>
+
+<div id="nav">
+  <button id="nprev" title="السابق">›</button>
+  <button id="nnext" title="التالي">‹</button>
 </div>
+<div id="dots"></div>
+<div id="counter"></div>
+
+<script>
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;
+const dots=document.getElementById('dots');
+slides.forEach((s,i)=>{const d=document.createElement('span');d.onclick=()=>go(i);dots.appendChild(d);});
+function toArabic(n){return String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);}
+function go(i){
+  if(i<0||i>=slides.length)return;
+  slides[cur].classList.remove('active');
+  cur=i;
+  const s=slides[cur];
+  s.classList.remove('active');
+  void s.offsetWidth;
+  s.classList.add('active');
+  document.getElementById('progress').style.width=((cur+1)/slides.length*100)+'%';
+  [...dots.children].forEach((d,j)=>d.classList.toggle('on',j===cur));
+  document.getElementById('counter').textContent=toArabic(cur+1)+' / '+toArabic(slides.length);
+  location.hash=cur+1;
+}
+document.getElementById('nnext').onclick=()=>go(cur+1);
+document.getElementById('nprev').onclick=()=>go(cur-1);
+addEventListener('keydown',e=>{
+  if(['ArrowLeft','PageDown',' '].includes(e.key)){e.preventDefault();go(cur+1);}
+  if(['ArrowRight','PageUp'].includes(e.key)){e.preventDefault();go(cur-1);}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+let tx=null;
+addEventListener('touchstart',e=>tx=e.touches[0].clientX);
+addEventListener('touchend',e=>{if(tx===null)return;const dx=e.changedTouches[0].clientX-tx;if(dx>60)go(cur+1);else if(dx<-60)go(cur-1);tx=null;});
+function fit(){
+  const s=document.getElementById('stage');
+  const k=Math.min(innerWidth/1280,innerHeight/720);
+  s.style.transform='scale('+k+')';
+}
+addEventListener('resize',fit);fit();
+
+/* البطاقات القلابة */
+document.querySelectorAll('.fq').forEach(c=>{
+  c.querySelector('.fq-inner').style.height='100%';
+  c.addEventListener('click',()=>c.classList.toggle('open'));
+});
+
+/* demo hook للتحقق الآلي */
+if(location.hash.includes('demo')){setTimeout(()=>{
+  document.querySelectorAll('.slide.active .fq').forEach(c=>c.classList.add('open'));
+},700);}
+const h=parseInt(location.hash.slice(1));
+go(!isNaN(h)&&h>=1&&h<=slides.length?h-1:0);
+</script>
 </body>
 </html>

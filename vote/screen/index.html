@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الشاشة الحية - تصويت الجمهور</title>
+<link rel="icon" type="image/png" href="../../assets/img/haydar-logo.png">
+<link rel="stylesheet" href="../../assets/css/theme.css">
+<style>
+html,body{overflow-x:clip}
+body{min-height:100vh;padding:22px 36px 40px;display:flex;flex-direction:column}
+
+.orn{position:fixed;border-radius:50%;pointer-events:none;z-index:0}
+.orn.o1{width:340px;height:340px;border:1.5px solid var(--line);top:-120px;left:-120px;opacity:.55}
+.orn.o2{width:220px;height:220px;border:1.5px dashed var(--line);bottom:-70px;right:-70px;opacity:.5}
+.orn.o3{width:14px;height:14px;background:var(--orange);opacity:.25;top:120px;right:140px;animation:floaty 5s ease-in-out infinite}
+
+header{display:flex;align-items:center;gap:20px;position:relative;z-index:1}
+.logos{display:flex;align-items:center;gap:16px}
+.logos img{height:56px;width:auto}
+.logos .sep{width:6px;height:6px;border-radius:50%;background:var(--orange);opacity:.6}
+header h1{font-size:32px;font-weight:800;color:var(--green)}
+header h1 em{font-style:normal;color:var(--orange)}
+header .sub{color:var(--muted);font-size:15px;font-weight:700}
+#status{margin-inline-start:auto;display:flex;align-items:center;gap:8px;color:var(--muted);font-size:14.5px;font-weight:700}
+#status .dot{width:10px;height:10px;border-radius:50%;background:#1E7A46;animation:blink 2s infinite}
+#status.warn .dot{background:var(--orange)}
+@keyframes blink{50%{opacity:.35}}
+
+/* presenter banner */
+#pres{margin-top:18px;background:var(--green);border-radius:22px;padding:20px 40px;text-align:center;position:relative;z-index:1;overflow:hidden}
+#pres::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.07) 50%,transparent 60%);transform:translateX(-100%);animation:shine 3.2s ease-in-out infinite}
+@keyframes shine{60%,100%{transform:translateX(100%)}}
+#round-tag{display:inline-block;background:rgba(250,246,239,.15);color:#E9A94F;font-size:17px;font-weight:800;border-radius:100px;padding:4px 22px}
+#p-name{font-size:52px;font-weight:800;color:var(--cream);line-height:1.25;margin-top:6px}
+#p-title{font-size:23px;color:#D5DCD8;font-weight:700;margin-top:2px;min-height:32px}
+#p-q{font-size:20px;color:#E9A94F;font-weight:800;margin-top:10px}
+
+/* chart */
+#chart{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:34px;align-items:end;margin-top:22px;padding:0 60px;position:relative;z-index:1;min-height:300px}
+.col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.cnt{font-size:64px;font-weight:800;color:var(--green);line-height:1}
+.cnt.bump{animation:bump .5s}
+@keyframes bump{40%{transform:scale(1.22)}}
+.pct{font-size:20px;font-weight:800;color:var(--muted);margin-top:2px}
+.barv{width:100%;max-width:250px;border-radius:18px 18px 0 0;margin-top:12px;transition:height 1s cubic-bezier(.2,.7,.2,1);position:relative;overflow:hidden;min-height:10px}
+.barv::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.22),transparent 40%)}
+.col.yes .barv{background:#1E7A46}
+.col.mid .barv{background:#E9A94F}
+.col.no .barv{background:#B4513E}
+.lbl{margin-top:14px;font-size:26px;font-weight:800;color:var(--green);display:flex;align-items:center;gap:8px}
+.col .win{font-size:26px;opacity:0;transition:opacity .4s}
+.col.leader .win{opacity:1;animation:floaty 3s ease-in-out infinite}
+
+/* total strip */
+#foot{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:18px;position:relative;z-index:1}
+#total-box{background:var(--card);border:1px solid var(--line);border-radius:100px;padding:12px 38px;font-size:22px;font-weight:800;color:var(--green);display:flex;align-items:center;gap:12px}
+#total-box b{font-size:34px;color:var(--orange)}
+#nostate{position:relative;z-index:1;flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);text-align:center}
+#nostate.on{display:flex}
+#nostate .t{font-size:34px;font-weight:800;color:var(--green)}
+#nostate .pulse{width:16px;height:16px;border-radius:50%;background:var(--orange);margin:24px auto 0;animation:pulse-ring 1.8s infinite}
+
+/* toast جولة جديدة */
+#toast{position:fixed;top:18px;right:50%;transform:translate(50%,-90px);background:var(--orange);color:#fff;font-size:20px;font-weight:800;border-radius:100px;padding:13px 34px;z-index:70;transition:transform .5s cubic-bezier(.2,.8,.25,1.15);box-shadow:0 14px 34px rgba(217,119,6,.4);white-space:nowrap}
+#toast.on{transform:translate(50%,0)}
+
+.cf{position:fixed;top:-24px;z-index:75;pointer-events:none;animation:cf-fall var(--dur) var(--del) cubic-bezier(.3,.4,.6,.95) forwards}
+@keyframes cf-fall{0%{opacity:1;transform:translateY(0) rotate(0)}100%{opacity:.85;transform:translateY(108vh) rotate(var(--rot))}}
+</style>
+</head>
+<body>
+<div class="orn o1"></div><div class="orn o2"></div><div class="orn o3"></div>
+
+<header>
+  <div class="logos">
+    <img src="../../assets/img/haydar-logo.png" alt="حيدر المعاتيق">
+    <div class="sep"></div>
+    <img src="../../assets/img/gocode.png" alt="GoCode">
+  </div>
+  <div>
+    <h1>تصويت <em>الجمهور الحي</em></h1>
+    <div class="sub">هل المحتوى يعكس هوية الصوت؟ ✦ اليوم الثاني</div>
+  </div>
+  <div id="status"><span class="dot"></span><span id="stxt">مباشر</span></div>
+</header>
+
+<div id="pres">
+  <span id="round-tag">الجولة ٠</span>
+  <div id="p-name">-</div>
+  <div id="p-title"></div>
+  <div id="p-q">هل هذا المحتوى يعكس فعلاً هوية الصوت المكتوبة؟</div>
+</div>
+
+<div id="nostate">
+  <div class="t">بانتظار بدء أول جولة من شاشة المدرب…</div>
+  <div class="pulse"></div>
+</div>
+
+<div id="chart">
+  <div class="col yes" data-c="yes">
+    <div class="cnt">٠</div><div class="pct">٠٪</div>
+    <div class="barv" style="height:4%"></div>
+    <div class="lbl"><span class="win">👑</span>نعم بوضوح ✅</div>
+  </div>
+  <div class="col mid" data-c="mid">
+    <div class="cnt">٠</div><div class="pct">٠٪</div>
+    <div class="barv" style="height:4%"></div>
+    <div class="lbl"><span class="win">👑</span>جزئياً 🤔</div>
+  </div>
+  <div class="col no" data-c="no">
+    <div class="cnt">٠</div><div class="pct">٠٪</div>
+    <div class="barv" style="height:4%"></div>
+    <div class="lbl"><span class="win">👑</span>لا ❌</div>
+  </div>
+</div>
+
+<div id="foot">
+  <div id="total-box">🗳 إجمالي المصوّتين <b id="total">٠</b></div>
+</div>
+
+<div id="toast"></div>
+
+<script src="../config.js"></script>
+<script>
+const DEMO=new URLSearchParams(location.search).has('demo');
+const AR=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+let round=null,counts={yes:0,mid:0,no:0};
+
+function tween(el,to,suffix){
+  const from=el._v||0;
+  if(from===to)return;
+  el._v=to;
+  const t0=performance.now(),dur=600;
+  const step=t=>{
+    const p=Math.min(1,Math.max(0,(t-t0)/dur)),e=1-Math.pow(1-p,3);
+    el.textContent=AR(Math.round(from+(to-from)*e))+(suffix||'');
+    if(p<1)requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+  el.classList.add('bump');setTimeout(()=>el.classList.remove('bump'),500);
+}
+
+const CF_COLORS=['#D97706','#E9A94F','#1E7A46','#B4513E','#083528'];
+function confetti(n){
+  for(let i=0;i<n;i++){
+    const d=document.createElement('div');
+    d.className='cf';
+    const w=6+Math.random()*8;
+    d.style.cssText=`left:${Math.random()*100}vw;width:${w}px;height:${w*1.4}px;background:${CF_COLORS[Math.random()*CF_COLORS.length|0]};border-radius:${Math.random()<.3?'50%':'3px'};--dur:${2.2+Math.random()*1.6}s;--del:${Math.random()*.4}s;--rot:${(Math.random()<.5?-1:1)*(360+Math.random()*540)}deg`;
+    document.body.appendChild(d);
+    setTimeout(()=>d.remove(),4600);
+  }
+}
+function toast(txt){
+  const t=document.getElementById('toast');
+  t.textContent=txt;t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'),2600);
+}
+
+function render(){
+  const total=counts.yes+counts.mid+counts.no;
+  tween(document.getElementById('total'),total);
+  let max=0,leader=null;
+  ['yes','mid','no'].forEach(c=>{if(counts[c]>max){max=counts[c];leader=c;}});
+  document.querySelectorAll('.col').forEach(col=>{
+    const c=col.dataset.c,v=counts[c];
+    tween(col.querySelector('.cnt'),v);
+    col.querySelector('.pct').textContent=AR(total?Math.round(100*v/total):0)+'٪';
+    col.querySelector('.barv').style.height=Math.max(4,total?v/Math.max(1,max)*88:4)+'%';
+    col.classList.toggle('leader',total>0&&c===leader&&v===max&&max>0);
+  });
+}
+
+function setState(s){
+  const no=document.getElementById('nostate'),ch=document.getElementById('chart'),pres=document.getElementById('pres'),ft=document.getElementById('foot');
+  if(!s||!s.round){no.classList.add('on');ch.style.display='none';pres.style.display='none';ft.style.display='none';return;}
+  no.classList.remove('on');ch.style.display='grid';pres.style.display='block';ft.style.display='flex';
+  document.getElementById('round-tag').textContent='الجولة '+AR(s.round);
+  document.getElementById('p-name').textContent=s.name||'-';
+  document.getElementById('p-title').textContent=s.title||'';
+  if(s.round!==round){
+    const first=round===null;
+    round=s.round;
+    counts={yes:0,mid:0,no:0};
+    ['total'].forEach(id=>{const el=document.getElementById(id);el._v=0;el.textContent='٠';});
+    document.querySelectorAll('.cnt').forEach(el=>{el._v=0;el.textContent='٠';});
+    document.querySelectorAll('.pct').forEach(el=>el.textContent='٠٪');
+    document.querySelectorAll('.barv').forEach(b=>b.style.height='4%');
+    document.querySelectorAll('.col').forEach(c=>c.classList.remove('leader'));
+    if(!first){toast('🎤 جولة جديدة: '+(s.name||''));confetti(40);}
+  }
+}
+
+let failures=0;
+async function poll(){
+  try{
+    const rs=await fetch(V_STATE_URL);
+    if(rs.status===404){setState(null);return;}
+    const sd=await rs.json(),sf=sd.fields||{};
+    const g=k=>sf[k]?sf[k].stringValue:'';
+    setState({round:g('round'),name:g('name'),title:g('title')});
+    if(round===null)return;
+    const rv=await fetch(V_RQ_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(votesQuery(round))});
+    if(!rv.ok)throw 0;
+    const rows=await rv.json();
+    const c={yes:0,mid:0,no:0};
+    rows.forEach(x=>{
+      if(!x.document)return;
+      const ch=x.document.fields?.choice?.stringValue;
+      if(c[ch]!==undefined)c[ch]++;
+    });
+    counts=c;
+    failures=0;
+    document.getElementById('status').classList.remove('warn');
+    document.getElementById('stxt').textContent='مباشر';
+    render();
+  }catch(e){
+    failures++;
+    if(failures>=2){
+      document.getElementById('status').classList.add('warn');
+      document.getElementById('stxt').textContent='يعيد الاتصال…';
+    }
+  }
+}
+
+/* وضع تجريبي */
+function demo(){
+  document.getElementById('stxt').textContent='وضع تجريبي';
+  setState({round:'3',name:'نورة العتيبي',title:'صورة ترويجية - عطور ريف'});
+  const seq=['yes','yes','mid','yes','no','yes','mid','yes','yes','mid','yes','yes','no','yes','yes'];
+  let i=0;
+  const step=()=>{
+    if(i>=seq.length)return;
+    counts[seq[i]]++;i++;render();
+    setTimeout(step,i<4?900:1400);
+  };
+  setTimeout(step,800);
+}
+
+if(DEMO)demo();
+else{poll();setInterval(poll,2500);}
+</script>
+</body>
+</html>

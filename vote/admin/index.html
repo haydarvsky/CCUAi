@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تحكم المدرب - التصويت الحي</title>
+<link rel="icon" type="image/png" href="../../assets/img/haydar-logo.png">
+<link rel="stylesheet" href="../../assets/css/theme.css">
+<style>
+html,body{overflow-x:clip}
+body{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:26px 18px 50px}
+
+header{text-align:center}
+.logos{display:flex;align-items:center;justify-content:center;gap:18px}
+.logos img{height:48px;width:auto}
+.logos .sep{width:6px;height:6px;border-radius:50%;background:var(--orange);opacity:.6}
+header h1{font-size:27px;font-weight:800;color:var(--green);margin-top:10px}
+header h1 em{font-style:normal;color:var(--orange)}
+header p{color:var(--muted);font-size:14.5px;font-weight:700;margin-top:2px}
+
+.card{width:100%;max-width:460px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;margin-top:16px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;right:0;left:0;height:4px;background:var(--orange)}
+.card h2{font-size:17px;font-weight:800;color:var(--green);margin-bottom:10px}
+label{display:block;font-size:15px;font-weight:700;color:var(--green);margin:12px 0 5px}
+input{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:11px 14px;font-family:inherit;font-size:17px;background:#FFFDF9;color:var(--body)}
+input:focus{outline:none;border-color:var(--orange)}
+#start{width:100%;margin-top:16px;background:var(--green);color:var(--cream);border:none;border-radius:100px;padding:14px;font-family:inherit;font-size:19px;font-weight:800;cursor:pointer;transition:.2s}
+#start:hover{background:var(--orange)}
+#start:disabled{opacity:.6}
+#msg{text-align:center;font-size:15px;font-weight:700;margin-top:10px;min-height:22px;color:var(--muted)}
+#msg.ok{color:#1E7A46}
+#msg.err{color:#B4513E}
+
+.cur{display:flex;align-items:center;gap:12px;justify-content:center;text-align:center}
+.cur .rtag{background:var(--orange);color:#fff;font-weight:800;font-size:15px;border-radius:100px;padding:4px 16px;white-space:nowrap}
+.cur .nm{font-size:21px;font-weight:800;color:var(--green)}
+.cur .tt{font-size:14.5px;color:var(--muted);font-weight:700}
+
+/* نتيجة آخر جولة */
+.res{display:flex;flex-direction:column;gap:9px}
+.rb .rl{display:flex;justify-content:space-between;font-size:15px;font-weight:700;color:var(--body);margin-bottom:3px}
+.rb .rl b{color:var(--green)}
+.rb .tr{height:14px;background:#EAE2D2;border-radius:10px;overflow:hidden}
+.rb .fl{height:100%;border-radius:10px;width:0;transition:width .7s cubic-bezier(.2,.7,.2,1)}
+.rb.yes .fl{background:#1E7A46}
+.rb.mid .fl{background:#E9A94F}
+.rb.no .fl{background:#B4513E}
+#lastres-empty{font-size:14.5px;color:var(--muted);font-weight:700;text-align:center}
+
+.linkrow{display:flex;gap:10px;margin-top:14px}
+.linkrow a{flex:1;text-align:center;text-decoration:none;background:none;border:1.5px solid var(--line);border-radius:100px;padding:10px;font-size:14.5px;font-weight:700;color:var(--muted);transition:.2s}
+.linkrow a:hover{border-color:var(--orange);color:var(--orange)}
+#wipe{width:100%;margin-top:14px;background:none;border:1.5px solid var(--line);border-radius:100px;padding:10px;font-family:inherit;font-size:14.5px;font-weight:700;color:var(--muted);cursor:pointer;transition:.2s}
+#wipe:hover{border-color:#B4513E;color:#B4513E}
+</style>
+</head>
+<body>
+<header>
+  <div class="logos">
+    <img src="../../assets/img/haydar-logo.png" alt="حيدر المعاتيق">
+    <div class="sep"></div>
+    <img src="../../assets/img/gocode.png" alt="GoCode">
+  </div>
+  <h1>تحكم <em>المدرب</em></h1>
+  <p>التصويت الحي ✦ اليوم الثاني</p>
+</header>
+
+<div class="card">
+  <h2>الجولة الحالية</h2>
+  <div class="cur">
+    <span class="rtag" id="cur-round">لا جولة بعد</span>
+    <div><div class="nm" id="cur-name">-</div><div class="tt" id="cur-title"></div></div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>بدء جولة جديدة</h2>
+  <label for="name">اسم المتدرب</label>
+  <input type="text" id="name" placeholder="مثال: نورة العتيبي">
+  <label for="title">عنوان عرضه <small style="color:var(--muted)">(اختياري)</small></label>
+  <input type="text" id="title" placeholder="مثال: صورة ترويجية - عطور ريف">
+  <button id="start">▶ بدء جولة جديدة</button>
+  <div id="msg"></div>
+</div>
+
+<div class="card">
+  <h2>نتيجة آخر جولة منتهية <span id="lr-tag" style="color:var(--orange)"></span></h2>
+  <div class="res" id="lastres">
+    <div id="lastres-empty">ستظهر بعد بدء الجولة الثانية</div>
+    <div class="rb yes" style="display:none"><div class="rl"><span>نعم بوضوح ✅</span><b>٠</b></div><div class="tr"><div class="fl"></div></div></div>
+    <div class="rb mid" style="display:none"><div class="rl"><span>جزئياً 🤔</span><b>٠</b></div><div class="tr"><div class="fl"></div></div></div>
+    <div class="rb no" style="display:none"><div class="rl"><span>لا ❌</span><b>٠</b></div><div class="tr"><div class="fl"></div></div></div>
+  </div>
+  <div class="linkrow">
+    <a href="../screen/" target="_blank">🖥 الشاشة الحية</a>
+    <a href="../" target="_blank">📱 صفحة التصويت</a>
+  </div>
+  <button id="wipe">🗑 مسح كل الأصوات وإنهاء الجولات</button>
+</div>
+
+<script src="../config.js"></script>
+<script>
+const AR=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+let round=0;
+const msg=document.getElementById('msg');
+
+async function loadState(){
+  try{
+    const r=await fetch(V_STATE_URL);
+    if(r.status===404){round=0;showCur(null);return;}
+    const d=await r.json(),f=d.fields||{};
+    const g=k=>f[k]?f[k].stringValue:'';
+    round=parseInt(g('round'))||0;
+    showCur({round:g('round'),name:g('name'),title:g('title')});
+    if(round>1)loadLast(round-1);
+  }catch(e){}
+}
+function showCur(s){
+  document.getElementById('cur-round').textContent=s&&s.round?('الجولة '+AR(s.round)):'لا جولة بعد';
+  document.getElementById('cur-name').textContent=s?s.name||'-':'-';
+  document.getElementById('cur-title').textContent=s?s.title||'':'';
+}
+
+async function loadLast(r){
+  try{
+    const rv=await fetch(V_RQ_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(votesQuery(r))});
+    if(!rv.ok)return;
+    const rows=await rv.json();
+    const c={yes:0,mid:0,no:0};
+    rows.forEach(x=>{if(x.document){const ch=x.document.fields?.choice?.stringValue;if(c[ch]!==undefined)c[ch]++;}});
+    const total=c.yes+c.mid+c.no,max=Math.max(1,c.yes,c.mid,c.no);
+    document.getElementById('lr-tag').textContent='- الجولة '+AR(r);
+    document.getElementById('lastres-empty').style.display=total?'none':'';
+    ['yes','mid','no'].forEach(k=>{
+      const b=document.querySelector('.rb.'+k);
+      b.style.display=total?'':'none';
+      b.querySelector('b').textContent=AR(c[k]);
+      b.querySelector('.fl').style.width=(c[k]/max*100)+'%';
+    });
+  }catch(e){}
+}
+
+document.getElementById('start').addEventListener('click',async()=>{
+  const name=document.getElementById('name').value.trim();
+  if(!name){msg.textContent='اكتب اسم المتدرب أولاً';msg.className='err';return;}
+  const btn=document.getElementById('start');
+  btn.disabled=true;msg.textContent='جارٍ البدء…';msg.className='';
+  const S=v=>({stringValue:v});
+  const newRound=round+1;
+  let ok=false;
+  for(let i=0;i<3&&!ok;i++){
+    try{
+      const r=await fetch(V_STATE_URL,{method:'PATCH',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({fields:{session:S(V_CONFIG.STATE_DOC),round:S(String(newRound)),
+          name:S(name),title:S(document.getElementById('title').value.trim()),ts:S(new Date().toISOString())}})});
+      ok=r.ok;
+    }catch(e){}
+    if(!ok)await new Promise(res=>setTimeout(res,800*(i+1)));
+  }
+  btn.disabled=false;
+  if(ok){
+    if(round>=1)loadLast(round);
+    round=newRound;
+    showCur({round:String(newRound),name,title:document.getElementById('title').value.trim()});
+    msg.textContent='بدأت الجولة '+AR(newRound)+' ✓ - الشاشة والجوالات تحدّثت';
+    msg.className='ok';
+    document.getElementById('name').value='';document.getElementById('title').value='';
+  }else{msg.textContent='تعذّر البدء - تأكد من الإنترنت';msg.className='err';}
+});
+
+document.getElementById('wipe').addEventListener('click',async()=>{
+  if(!confirm('متأكد؟ راح تنحذف كل الأصوات وتنتهي الجولات نهائياً'))return;
+  const btn=document.getElementById('wipe');
+  btn.disabled=true;btn.textContent='جارٍ المسح…';
+  try{
+    const rv=await fetch(V_RQ_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({structuredQuery:{
+        from:[{collectionId:V_CONFIG.COLLECTION}],
+        where:{fieldFilter:{field:{fieldPath:'session'},op:'EQUAL',value:{stringValue:V_CONFIG.VOTES_SESSION}}},
+        limit:300
+      }})});
+    const rows=await rv.json();
+    for(const x of rows){
+      if(!x.document)continue;
+      await fetch(`https://firestore.googleapis.com/v1/${x.document.name}?key=${V_CONFIG.API_KEY}`,{method:'DELETE'});
+    }
+    await fetch(V_STATE_URL,{method:'DELETE'});
+    round=0;showCur(null);
+    document.getElementById('lastres-empty').style.display='';
+    document.querySelectorAll('.rb').forEach(b=>b.style.display='none');
+    document.getElementById('lr-tag').textContent='';
+    msg.textContent='تم المسح - الأداة جاهزة من جديد';msg.className='ok';
+  }catch(e){alert('تعذّر المسح - حاول مرة ثانية');}
+  btn.disabled=false;btn.textContent='🗑 مسح كل الأصوات وإنهاء الجولات';
+});
+
+loadState();
+</script>
+</body>
+</html>
