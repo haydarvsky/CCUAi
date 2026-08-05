@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الشاشة الحية - شوف مشروعك على الشاشة</title>
+<link rel="icon" type="image/png" href="../../assets/img/gocode.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --org:#F4762C; --red:#E8435A; --amber:#FBB040;
+  --bg:#171210; --panel:#221B18; --line:#3A2E28; --txt:#F7EFE9; --mut:#A8988C;
+  --grad:linear-gradient(135deg,#F4762C,#E8435A);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);font-family:'Cairo',sans-serif;color:var(--txt);min-height:100vh;padding:26px 30px 40px}
+body::before{content:'';position:fixed;inset:0;background:
+  radial-gradient(700px 400px at 85% -10%,rgba(244,118,44,.13),transparent),
+  radial-gradient(600px 350px at 10% 110%,rgba(232,67,90,.10),transparent);pointer-events:none}
+
+header{display:flex;align-items:center;gap:18px;position:relative;z-index:1}
+header img{height:58px}
+header h1{font-size:30px;font-weight:900}
+header h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+header .sub{color:var(--mut);font-size:14px;font-weight:600}
+#status{margin-inline-start:auto;display:flex;align-items:center;gap:8px;color:var(--mut);font-size:13.5px;font-weight:700}
+#status .dot{width:10px;height:10px;border-radius:50%;background:#4ADE80;animation:blink 2s infinite}
+#status.warn .dot{background:var(--amber)}
+@keyframes blink{50%{opacity:.4}}
+
+/* stats bar */
+#stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:20px;position:relative;z-index:1}
+.st{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px 20px;position:relative;overflow:hidden}
+.st::after{content:'';position:absolute;top:0;right:0;left:0;height:3.5px;background:var(--grad)}
+.st .v{font-size:44px;font-weight:900;line-height:1.15;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;transition:transform .3s}
+.st .v.bump{animation:bump .5s}
+@keyframes bump{40%{transform:scale(1.18)}}
+.st .l{color:var(--mut);font-size:15px;font-weight:700;margin-top:2px}
+
+/* main grid */
+#main{display:grid;grid-template-columns:320px 1fr;gap:16px;margin-top:16px;position:relative;z-index:1;align-items:start}
+
+/* chart */
+#chart{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px 20px}
+#chart h3{font-size:16.5px;font-weight:900;margin-bottom:12px;color:var(--txt)}
+.bar{margin:10px 0}
+.bar .bl{display:flex;justify-content:space-between;font-size:14px;font-weight:700;color:var(--mut);margin-bottom:4px}
+.bar .bl b{color:var(--txt)}
+.bar .tr{height:14px;background:#2C231F;border-radius:10px;overflow:hidden}
+.bar .fl{height:100%;border-radius:10px;background:var(--grad);width:0;transition:width .8s cubic-bezier(.2,.7,.2,1)}
+
+/* cards */
+#cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+.pc{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px 18px;animation:enter .6s cubic-bezier(.2,.7,.2,1) both}
+@keyframes enter{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+.pc .pn{font-size:20px;font-weight:900;line-height:1.3}
+.pc .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.pc .tg{background:#2C231F;border:1px solid var(--line);border-radius:100px;padding:3px 12px;font-size:12.5px;font-weight:700;color:var(--amber)}
+.pc .aud{margin-top:10px;font-size:14px;font-weight:700;color:var(--mut)}
+.pc .flags{display:flex;gap:14px;margin-top:8px;font-size:13.5px;font-weight:700}
+.pc .flags span{display:flex;align-items:center;gap:5px;color:var(--mut)}
+
+#empty{grid-column:1/-1;text-align:center;padding:70px 20px;color:var(--mut)}
+#empty .qr-hint{font-size:26px;font-weight:900;color:var(--txt)}
+#empty p{font-size:16px;font-weight:600;margin-top:6px}
+#empty .pulse{width:16px;height:16px;border-radius:50%;background:var(--grad);margin:22px auto 0;animation:pulse 1.6s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(244,118,44,.5)}70%{box-shadow:0 0 0 26px rgba(244,118,44,0)}100%{box-shadow:0 0 0 0 rgba(244,118,44,0)}}
+
+@media (max-width:900px){
+  #stats{grid-template-columns:1fr 1fr}
+  #main{grid-template-columns:1fr}
+  .st .v{font-size:34px}
+}
+</style>
+</head>
+<body>
+<header>
+  <img src="../../assets/img/gocode.png" alt="GoCode">
+  <div>
+    <h1>شوف مشروعك <em>على الشاشة</em></h1>
+    <div class="sub">دورة صناعة المحتوى بالذكاء الاصطناعي ✦ GoCode</div>
+  </div>
+  <div id="status"><span class="dot"></span><span id="stxt">مباشر</span></div>
+</header>
+
+<div id="stats">
+  <div class="st"><div class="v" id="s-count">٠</div><div class="l">مشارك مسجَّل</div></div>
+  <div class="st"><div class="v" id="s-logo">-</div><div class="l">عندهم شعار جاهز</div></div>
+  <div class="st"><div class="v" id="s-plan">-</div><div class="l">عندهم خطة تسويقية واضحة</div></div>
+  <div class="st"><div class="v" id="s-plat">-</div><div class="l">المنصة الأكثر تكراراً</div></div>
+</div>
+
+<div id="main">
+  <div id="chart">
+    <h3>توزيع طبيعة المشاريع</h3>
+    <div id="bars"></div>
+  </div>
+  <div id="cards">
+    <div id="empty">
+      <div class="qr-hint">📱 امسح الـ QR وسجّل مشروعك</div>
+      <p>البطاقات راح تظهر هنا لحظة بلحظة…</p>
+      <div class="pulse"></div>
+    </div>
+  </div>
+</div>
+
+<script src="../config.js"></script>
+<script>
+const DEMO=new URLSearchParams(location.search).has('demo');
+const SESSION=new URLSearchParams(location.search).get('s')||CC_CONFIG.SESSION;
+const PTYPES=['تجاري','شخصي','خدمي','منتج مادي','تقني - برمجي','أخرى'];
+const AR=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+
+const seen=new Set();
+let all=[];
+
+function render(){
+  const n=all.length;
+  const set=(id,val)=>{
+    const el=document.getElementById(id);
+    if(el.textContent!==val){el.textContent=val;el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump');}
+  };
+  set('s-count',AR(n));
+  if(n){
+    set('s-logo',AR(Math.round(100*all.filter(p=>p.logo==='نعم').length/n))+'٪');
+    set('s-plan',AR(Math.round(100*all.filter(p=>p.plan==='واضحة').length/n))+'٪');
+    const pc={};all.forEach(p=>pc[p.platform]=(pc[p.platform]||0)+1);
+    set('s-plat',Object.entries(pc).sort((a,b)=>b[1]-a[1])[0][0]);
+  }
+  // chart
+  const tc={};all.forEach(p=>tc[p.ptype]=(tc[p.ptype]||0)+1);
+  const max=Math.max(1,...Object.values(tc));
+  const bars=document.getElementById('bars');
+  PTYPES.forEach(t=>{
+    let b=bars.querySelector(`[data-t="${t}"]`);
+    if(!b){
+      b=document.createElement('div');b.className='bar';b.dataset.t=t;
+      b.innerHTML=`<div class="bl"><span>${t}</span><b>٠</b></div><div class="tr"><div class="fl"></div></div>`;
+      bars.appendChild(b);
+    }
+    const c=tc[t]||0;
+    b.querySelector('b').textContent=AR(c);
+    b.querySelector('.fl').style.width=(c/max*100)+'%';
+  });
+  // cards
+  const cards=document.getElementById('cards');
+  const empty=document.getElementById('empty');
+  if(n)empty.style.display='none';
+  all.forEach(p=>{
+    if(cards.querySelector(`[data-id="${p.id}"]`))return;
+    const el=document.createElement('div');
+    el.className='pc';el.dataset.id=p.id;
+    const ok=v=>v?'✅':'❌';
+    el.innerHTML=`
+      <div class="pn">${esc(p.project)}</div>
+      <div class="tags"><span class="tg">${esc(p.ptype)}</span><span class="tg">${esc(p.stage)}</span></div>
+      <div class="aud">🎯 ${esc(p.age)} ✦ ${esc(p.platform)}</div>
+      <div class="flags">
+        <span>${ok(p.logo==='نعم')} شعار</span>
+        <span>${ok(p.plan==='واضحة')} خطة تسويقية</span>
+      </div>`;
+    cards.prepend(el);
+  });
+}
+function esc(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+
+/* ---- live polling ---- */
+const RQ_URL=`https://firestore.googleapis.com/v1/projects/${CC_CONFIG.PROJECT_ID}/databases/(default)/documents:runQuery?key=${CC_CONFIG.API_KEY}`;
+let failures=0;
+async function poll(){
+  try{
+    const r=await fetch(RQ_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({structuredQuery:{
+        from:[{collectionId:CC_CONFIG.COLLECTION}],
+        where:{fieldFilter:{field:{fieldPath:'session'},op:'EQUAL',value:{stringValue:SESSION}}},
+        limit:300
+      }})});
+    if(!r.ok)throw 0;
+    const rows=await r.json();
+    const list=[];
+    rows.forEach(x=>{
+      if(!x.document)return;
+      const f=x.document.fields||{};
+      const g=k=>f[k]?f[k].stringValue:'';
+      const id=x.document.name.split('/').pop();
+      list.push({id,project:g('project'),ptype:g('ptype'),stage:g('stage'),logo:g('logo'),
+                 plan:g('plan'),age:g('age'),platform:g('platform'),ts:g('ts')});
+    });
+    list.sort((a,b)=>a.ts<b.ts?-1:1);
+    all=list;
+    failures=0;
+    document.getElementById('status').classList.remove('warn');
+    document.getElementById('stxt').textContent='مباشر';
+    render();
+  }catch(e){
+    failures++;
+    if(failures>=2){
+      document.getElementById('status').classList.add('warn');
+      document.getElementById('stxt').textContent='يعيد الاتصال…';
+    }
+  }
+}
+
+/* ---- demo mode: بيانات تجريبية تظهر تدريجياً (?demo) ---- */
+const FAKE=[
+  ['متجر بُنّ الديرة','تجاري','يعمل حالياً وأبي أطوّر تسويقه','نعم','أفكار متفرقة','20-30','إنستقرام'],
+  ['عيادة نبض','خدمي','بداية تشغيل','نعم','واضحة','30-45','إنستقرام'],
+  ['تطبيق مشوار','تقني - برمجي','فكرة فقط','لا','لا شي إطلاقاً','20-30','تيك توك'],
+  ['حلويات دانة','منتج مادي','يعمل حالياً وأبي أطوّر تسويقه','قيد التصميم','أفكار متفرقة','متنوعة','سناب شات'],
+  ['أكاديمية قمم','خدمي','بداية تشغيل','نعم','واضحة','30-45','لينكدإن'],
+  ['بودكاست همس','شخصي','فكرة فقط','لا','لا شي إطلاقاً','20-30','تيك توك'],
+  ['عطور ريف','تجاري','يعمل حالياً وأبي أطوّر تسويقه','نعم','أفكار متفرقة','20-30','إنستقرام'],
+  ['ورشة إبداع الطفل','خدمي','بداية تشغيل','قيد التصميم','لا شي إطلاقاً','30-45','واتساب'],
+  ['منصة رزنامة','تقني - برمجي','فكرة فقط','لا','أفكار متفرقة','20-30','موقع إلكتروني'],
+  ['مطبخ أم نواف','منتج مادي','يعمل حالياً وأبي أطوّر تسويقه','لا','لا شي إطلاقاً','متنوعة','واتساب'],
+  ['استشارات نمو','خدمي','يعمل حالياً وأبي أطوّر تسويقه','نعم','واضحة','45+','لينكدإن'],
+  ['قهوة مختصة كيف','تجاري','بداية تشغيل','نعم','أفكار متفرقة','20-30','إنستقرام']
+];
+function demo(){
+  let i=0;
+  const step=()=>{
+    if(i>=FAKE.length)return;
+    const [project,ptype,stage,logo,plan,age,platform]=FAKE[i];
+    all.push({id:'demo'+i,project,ptype,stage,logo,plan,age,platform,ts:String(i)});
+    i++;render();
+    setTimeout(step,i<3?1200:2600);
+  };
+  step();
+}
+
+if(DEMO){document.getElementById('stxt').textContent='وضع تجريبي';demo();}
+else{poll();setInterval(poll,4000);}
+</script>
+</body>
+</html>

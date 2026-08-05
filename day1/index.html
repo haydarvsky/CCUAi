@@ -3,31 +3,673 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>اليوم الأول - صناعة المحتوى بالذكاء الاصطناعي</title>
+<title>اليوم الأول - العقل قبل الأداة | صناعة المحتوى بالذكاء الاصطناعي</title>
 <link rel="stylesheet" href="../assets/css/theme.css">
 <link rel="icon" type="image/png" href="../assets/img/haydar-logo.png">
 <style>
-body{min-height:100vh;display:flex;align-items:center;justify-content:center;overflow-x:hidden}
-.orn{position:fixed;border-radius:50%;pointer-events:none}
+html,body{height:100%;overflow:hidden}
+
+#stage-wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#stage{width:1280px;height:720px;position:relative;transform-origin:center center;background:var(--cream)}
+
+/* ---------- slide base ---------- */
+.slide{position:absolute;inset:0;padding:56px 72px;display:none;flex-direction:column;align-items:center;justify-content:center}
+.slide.active{display:flex}
+.slide.active .a{animation:rise .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,0s)}
+
+/* ornaments */
+.orn{position:absolute;border-radius:50%;pointer-events:none}
 .orn.o1{width:340px;height:340px;border:1.5px solid var(--line);top:-120px;left:-120px;opacity:.55}
 .orn.o2{width:220px;height:220px;border:1.5px dashed var(--line);bottom:-70px;right:-70px;opacity:.5}
-.box{text-align:center;padding:40px 24px;position:relative;z-index:1}
-.num{width:96px;height:96px;border-radius:50%;background:var(--green);color:var(--cream);font-weight:800;font-size:46px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;animation:pulse-ring 2.4s 1s infinite}
-h1{font-family:'Sakkal Saad Poster';font-weight:400;font-size:64px;color:var(--green);line-height:1.2}
-.soon{display:inline-block;margin-top:18px;background:var(--orange-soft);color:var(--orange);font-weight:800;font-size:24px;border-radius:100px;padding:10px 36px;border:1.5px dashed var(--orange)}
-p{margin-top:16px;font-size:21px;color:var(--body)}
-.back{display:inline-flex;align-items:center;gap:10px;margin-top:34px;color:var(--cream);background:var(--green);text-decoration:none;font-weight:700;font-size:20px;border-radius:100px;padding:12px 34px;transition:transform .25s ease}
-.back:hover{transform:translateY(-3px)}
+.orn.o3{width:14px;height:14px;background:var(--orange);opacity:.25;top:120px;right:180px}
+.orn.o4{width:9px;height:9px;background:var(--green);opacity:.2;bottom:150px;left:210px}
+
+/* typography */
+.kicker{font-weight:700;color:var(--orange);font-size:24px;letter-spacing:.5px}
+.slide-title{font-weight:800;color:var(--green);font-size:46px;line-height:1.25}
+.title-row{display:flex;align-items:center;gap:22px;margin-bottom:8px}
+.title-row .tline{height:2px;width:110px;background:var(--orange);transform-origin:center;animation:growline .9s .35s both}
+
+.foot{position:absolute;bottom:22px;left:0;right:0;display:flex;justify-content:center;gap:14px;align-items:center;color:var(--muted);font-size:17px}
+.foot .sep{width:5px;height:5px;border-radius:50%;background:var(--orange);opacity:.6}
+
+/* ---------- S1 cover ---------- */
+.cov-grid{display:grid;grid-template-columns:1.12fr .88fr;align-items:center;width:1160px;gap:20px}
+.cov-text{text-align:center}
+.cover-kicker{font-size:24px;color:var(--orange);font-weight:700;margin-top:16px}
+.cover-title{font-family:'Sakkal Saad Poster';font-weight:400;font-size:104px;color:var(--green);line-height:1.15;margin:2px 0 4px}
+.cover-lines{display:flex;align-items:center;justify-content:center;gap:24px;margin:22px 0 14px}
+.cover-lines .l{height:2px;width:150px;background:var(--orange);transform-origin:center;animation:growline 1s .5s both}
+.cover-lines .dot{width:9px;height:9px;border-radius:50%;background:var(--orange);animation:pop .6s .9s both}
+.cover-sub{font-size:24px;color:var(--body);line-height:1.7}
+.ph-wrap{position:relative;width:440px;height:492px;margin:0 auto}
+.ph-ring{position:absolute;bottom:6px;left:50%;margin-left:-204px;width:404px;height:404px;border-radius:50%;border:2px dashed var(--orange);opacity:.5;animation:spin-slow 36s linear infinite}
+.ph-circle{position:absolute;bottom:20px;left:50%;margin-left:-188px;width:376px;height:376px;border-radius:50%;background:var(--card);border:1.5px solid var(--line)}
+.ph-clip{position:absolute;bottom:22px;left:50%;margin-left:-186px;width:372px;height:462px;border-radius:0 0 186px 186px;overflow:hidden}
+.ph-clip img{position:absolute;bottom:0;left:50%;margin-left:-212px;width:424px;filter:drop-shadow(0 14px 22px rgba(8,53,40,.18))}
+.ph-name{margin-top:12px;color:var(--green);font-weight:800;font-size:31px}
+.ph-badge{display:inline-block;margin-top:8px;background:var(--orange);color:#fff;font-weight:700;font-size:17.5px;border-radius:100px;padding:7px 26px;box-shadow:0 8px 20px rgba(217,119,6,.3)}
+
+/* ---------- S2 icebreaker QR ---------- */
+.ice-grid{display:grid;grid-template-columns:1fr 400px;gap:44px;width:1120px;align-items:center;margin-top:26px}
+.ice-steps{display:flex;flex-direction:column;gap:18px}
+.ice-step{display:flex;gap:18px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 24px}
+.ice-step .n{min-width:52px;height:52px;border-radius:50%;background:var(--green);color:var(--cream);font-weight:800;font-size:25px;display:flex;align-items:center;justify-content:center}
+.ice-step h3{color:var(--green);font-size:23px;font-weight:800}
+.ice-step p{font-size:17.5px;color:var(--body);margin-top:2px}
+.qr-card{background:#fff;border:1.5px solid var(--line);border-radius:22px;padding:26px;text-align:center;box-shadow:0 18px 40px rgba(8,53,40,.10)}
+.qr-card img{width:290px;height:290px;display:block;margin:0 auto}
+.qr-url{direction:ltr;font-family:Arial,'Sakkal Saad';font-weight:700;font-size:19px;color:var(--orange);margin-top:12px}
+.scr-btn{display:inline-flex;align-items:center;gap:10px;margin-top:20px;background:var(--green);color:var(--cream);text-decoration:none;font-weight:700;font-size:18px;border-radius:100px;padding:11px 28px;transition:transform .2s}
+.scr-btn:hover{transform:translateY(-3px)}
+
+/* ---------- S3 today ---------- */
+.hook-big{font-size:54px;font-weight:800;color:var(--green);text-align:center;line-height:1.45}
+.hook-big em{font-style:normal;color:var(--orange)}
+.hook-sub{font-size:25px;margin-top:14px;color:var(--body);text-align:center;line-height:1.7}
+.mind-vs{display:grid;grid-template-columns:1fr 1fr;gap:24px;width:1000px;margin-top:40px}
+.mv{border-radius:18px;padding:24px 28px;text-align:center}
+.mv.today{background:var(--green);color:var(--cream)}
+.mv.rest{background:var(--card);border:1px solid var(--line)}
+.mv .tag{display:inline-block;border-radius:100px;padding:4px 18px;font-weight:700;font-size:16px;margin-bottom:8px}
+.mv.today .tag{background:rgba(250,246,239,.15);color:#E9A94F}
+.mv.rest .tag{background:var(--orange-soft);color:var(--orange)}
+.mv h3{font-size:30px;font-weight:800}
+.mv.rest h3{color:var(--green)}
+.mv p{font-size:19px;margin-top:6px;line-height:1.6}
+.mv.today p{color:#D5DCD8}
+.mv.rest p{color:var(--body)}
+
+/* ---------- S4 tools map ---------- */
+.lex-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;width:1120px;margin-top:34px}
+.lex{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 16px;text-align:center;position:relative;overflow:hidden}
+.lex:after{content:'';position:absolute;top:0;right:0;left:0;height:3.5px;background:var(--lc,var(--orange))}
+.lex .ic{width:64px;height:64px;border-radius:50%;background:var(--cream);border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.lex .ic svg{width:32px;height:32px;stroke:var(--lc,var(--orange))}
+.lex h4{color:var(--green);font-weight:800;font-size:23px}
+.lex p{font-size:16.5px;color:var(--muted);margin-top:5px;line-height:1.55;font-weight:700}
+.lex .ex{margin-top:10px;display:inline-block;background:var(--cream);border:1px solid var(--line);border-radius:100px;padding:4px 16px;font-size:14.5px;color:var(--orange);font-weight:700;font-family:Arial,'Sakkal Saad'}
+
+/* ---------- S5 why brainstorm ---------- */
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;width:1080px;margin-top:36px}
+.why{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px 24px;text-align:center}
+.why .ic{width:70px;height:70px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.why .ic svg{width:34px;height:34px;stroke:#E9A94F}
+.why h3{color:var(--green);font-size:24px;font-weight:800;line-height:1.4}
+.why p{font-size:18px;color:var(--body);margin-top:8px;line-height:1.65}
+
+/* ---------- S6 executor vs partner ---------- */
+.vs-wrap{display:grid;grid-template-columns:1fr 84px 1fr;gap:0;width:1120px;align-items:stretch;margin-top:34px}
+.vs-col{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px 30px}
+.vs-col.ai{background:var(--green);border-color:var(--green)}
+.vs-col h3{font-size:26px;font-weight:800;color:var(--green);margin-bottom:14px}
+.vs-col.ai h3{color:var(--cream)}
+.vs-col ul{list-style:none}
+.vs-col li{display:flex;gap:12px;align-items:flex-start;font-size:19.5px;line-height:1.55;padding:7px 0;color:var(--body)}
+.vs-col.ai li{color:#D5DCD8}
+.vs-col li .mark{font-weight:800;min-width:22px;text-align:center}
+.vs-col li .mark.x{color:#B4513E}
+.vs-col li .mark.ok{color:#E9A94F}
+.vs-mid{display:flex;align-items:center;justify-content:center}
+.vs-badge{width:64px;height:64px;border-radius:50%;background:var(--orange);color:#fff;font-weight:800;font-size:21px;display:flex;align-items:center;justify-content:center;animation:pulse-ring 2.2s 1.4s infinite}
+.vs-punch{margin-top:24px;font-size:24px;font-weight:800;color:var(--green);text-align:center}
+.vs-punch em{font-style:normal;color:var(--orange)}
+
+/* ---------- S7 weak prompt demo ---------- */
+.pr-box{width:920px;background:var(--card);border:1.5px solid var(--line);border-radius:16px;border-top-right-radius:4px;padding:20px 30px;font-size:24px;color:var(--body);margin-top:30px;text-align:center}
+.pr-box b{color:var(--green)}
+.rev-btn{margin-top:26px;background:var(--green);color:var(--cream);border:none;border-radius:100px;padding:13px 38px;font-family:inherit;font-size:20px;font-weight:700;cursor:pointer;transition:.25s}
+.rev-btn:hover{background:var(--orange)}
+.weak-res{width:920px;margin-top:22px;display:none;background:#fff;border:1.5px dashed var(--line);border-radius:16px;padding:18px 28px}
+.weak-res.on{display:block;animation:rise .6s both}
+.weak-res ul{list-style:none}
+.weak-res li{font-size:19.5px;color:var(--muted);padding:5px 0;display:flex;gap:10px}
+.weak-res li::before{content:'✦';color:var(--line)}
+.weak-verdict{display:none;margin-top:16px;font-size:22px;font-weight:800;color:var(--green);text-align:center}
+.weak-verdict.on{display:block;animation:rise .6s both}
+.weak-verdict em{font-style:normal;color:#B4513E}
+
+/* ---------- S8 break ---------- */
+.brk-cup{font-size:120px;line-height:1;animation:floaty 4s ease-in-out infinite}
+.brk-title{font-family:'Sakkal Saad Poster';font-weight:400;font-size:96px;color:var(--green);margin-top:10px}
+.brk-sub{font-size:26px;color:var(--body);margin-top:8px}
+
+/* ---------- S9 seven elements ---------- */
+.el-chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;width:1140px;margin-top:20px}
+.el-chip{border:1.5px solid var(--line);background:var(--card);border-radius:100px;padding:9px 22px;font-weight:700;font-size:18.5px;color:var(--green);cursor:pointer;transition:.2s;user-select:none;display:flex;align-items:center;gap:9px}
+.el-chip .num{width:26px;height:26px;border-radius:50%;background:var(--ec,var(--orange));color:#fff;font-size:15px;display:flex;align-items:center;justify-content:center;font-weight:800}
+.el-chip.on,.el-chip:hover{border-color:var(--ec,var(--orange));box-shadow:0 6px 16px rgba(8,53,40,.10)}
+.el-chip.on{background:var(--ec,var(--orange));color:#fff}
+.el-chip.on .num{background:rgba(255,255,255,.25)}
+.el-prompt{width:1140px;background:#fff;border:1.5px solid var(--line);border-radius:18px;border-top-right-radius:4px;padding:22px 30px;margin-top:18px;font-size:21.5px;line-height:2;color:var(--body);text-align:right}
+.el-prompt .tag{border-radius:8px;padding:1px 7px;transition:.25s;cursor:pointer}
+.el-prompt .tag.lit{background:var(--tc);color:#fff;font-weight:700}
+.el-info{width:1140px;min-height:64px;margin-top:14px;border-radius:14px;padding:14px 24px;font-size:19px;line-height:1.65;background:var(--card);border:1px solid var(--line);color:var(--muted);display:flex;gap:10px;align-items:center;justify-content:center;text-align:center}
+.el-info.act{background:var(--ig);border-color:var(--ig);color:#fff}
+.el-info .inf-t{font-weight:800}
+
+/* ---------- S10 your card ---------- */
+.card-link{display:grid;grid-template-columns:400px 90px 1fr;gap:0;width:1120px;align-items:center;margin-top:30px}
+.mini-card{background:#171210;border-radius:20px;padding:24px 26px;color:#F7EFE9;box-shadow:0 20px 45px rgba(8,53,40,.25)}
+.mini-card .pn{font-size:26px;font-weight:800}
+.mini-card .tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.mini-card .tg{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:100px;padding:3px 14px;font-size:15px;color:#E9A94F;font-weight:700}
+.mini-card .aud{margin-top:12px;font-size:17px;color:#A8988C;font-weight:700}
+.cl-arrow{display:flex;align-items:center;justify-content:center;font-size:44px;color:var(--orange)}
+.cl-list{display:flex;flex-direction:column;gap:14px}
+.cl-item{display:flex;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 22px}
+.cl-item .num{min-width:34px;height:34px;border-radius:50%;background:var(--cc);color:#fff;font-weight:800;font-size:17px;display:flex;align-items:center;justify-content:center}
+.cl-item p{font-size:19px;color:var(--body)}
+.cl-item p b{color:var(--green)}
+
+/* ---------- S11 builder ---------- */
+.bld-wrap{display:grid;grid-template-columns:1fr 320px;gap:26px;width:1140px;margin-top:20px;align-items:start}
+.bld-prompt{background:#fff;border:1.5px solid var(--line);border-radius:18px;border-top-right-radius:4px;padding:20px 26px;min-height:270px;font-size:20.5px;line-height:1.95;color:var(--body);text-align:right}
+.bld-seg{display:none;border-radius:8px;padding:1px 7px}
+.bld-seg.on{display:inline;animation:rise .5s both}
+.bld-side{display:flex;flex-direction:column;gap:14px}
+.q-meter{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+.q-meter h4{font-size:17px;font-weight:800;color:var(--green);margin-bottom:10px}
+.q-track{height:18px;background:#EAE2D2;border-radius:20px;overflow:hidden}
+.q-fill{height:100%;width:12%;border-radius:20px;background:linear-gradient(90deg,#B4513E,var(--orange),#1E7A46);transition:width .8s cubic-bezier(.2,.7,.2,1)}
+.q-cap{font-size:16.5px;color:var(--muted);font-weight:700;margin-top:10px;line-height:1.6;min-height:78px}
+.bld-btn{background:var(--green);color:var(--cream);border:none;border-radius:100px;padding:13px 24px;font-family:inherit;font-size:18px;font-weight:700;cursor:pointer;transition:.25s}
+.bld-btn:hover{background:var(--orange)}
+.bld-btn:disabled{cursor:default}
+
+/* ---------- S12 compare ---------- */
+.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;width:1140px;margin-top:30px}
+.cmp{border-radius:18px;padding:24px 28px}
+.cmp.before{background:var(--card);border:1.5px dashed var(--line)}
+.cmp.after{background:var(--green)}
+.cmp h3{font-size:24px;font-weight:800;margin-bottom:12px}
+.cmp.before h3{color:var(--muted)}
+.cmp.after h3{color:#E9A94F}
+.cmp ul{list-style:none}
+.cmp li{font-size:19px;line-height:1.6;padding:7px 0;display:flex;gap:10px;align-items:flex-start}
+.cmp.before li{color:var(--muted)}
+.cmp.after li{color:#EDE7DC}
+.cmp.before li::before{content:'✦';color:var(--line)}
+.cmp.after li::before{content:'✦';color:#E9A94F}
+
+/* ---------- S13 final exercise ---------- */
+.fx-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;width:1100px;margin-top:36px}
+.fx{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px 24px;text-align:center;position:relative}
+.fx .n{width:58px;height:58px;border-radius:50%;background:var(--green);color:var(--cream);font-weight:800;font-size:27px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.fx h3{color:var(--green);font-size:23px;font-weight:800;line-height:1.4}
+.fx p{font-size:17.5px;color:var(--body);margin-top:8px;line-height:1.6}
+
+/* ---------- S14 checklist ---------- */
+.chk-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px;width:1000px;margin-top:26px}
+.chk{display:flex;gap:14px;align-items:center;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:13px 20px;cursor:pointer;transition:.2s;user-select:none}
+.chk .bx{min-width:32px;height:32px;border-radius:9px;border:2px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px;transition:.2s}
+.chk p{font-size:19.5px;color:var(--body);font-weight:700}
+.chk.on{border-color:#1E7A46;background:var(--green-soft)}
+.chk.on .bx{background:#1E7A46;border-color:#1E7A46}
+.chk-score{margin-top:22px;font-size:25px;font-weight:800;color:var(--green)}
+.chk-score b{color:var(--orange);font-size:31px}
+
+/* ---------- S15 close ---------- */
+.close-title{font-family:'Sakkal Saad Poster';font-weight:400;font-size:96px;color:var(--green)}
+.close-sub{font-size:26px;color:var(--body);margin-top:10px;line-height:1.8;text-align:center}
+.close-sub em{font-style:normal;color:var(--orange);font-weight:700}
+.close-tmw{margin-top:26px;background:var(--green);color:var(--cream);border-radius:18px;padding:18px 40px;font-size:22px;font-weight:700}
+.close-tmw b{color:#E9A94F}
+.close-logos{display:flex;align-items:center;gap:26px;margin-bottom:6px}
+.close-logos img{height:74px;animation:floaty 5s ease-in-out infinite}
+.close-logos .dv{width:1.5px;height:56px;background:var(--line)}
+
+/* ---------- navigation ---------- */
+#progress{position:fixed;top:0;right:0;height:4px;background:var(--orange);z-index:60;transition:width .45s cubic-bezier(.2,.7,.2,1)}
+#nav{position:fixed;bottom:18px;left:26px;display:flex;gap:10px;z-index:60}
+#nav button{width:46px;height:46px;border-radius:50%;border:1.5px solid var(--line);background:var(--cream);color:var(--green);font-size:21px;cursor:pointer;transition:.25s;font-family:inherit}
+#nav button:hover{background:var(--orange);border-color:var(--orange);color:#fff}
+#dots{position:fixed;bottom:32px;right:50%;transform:translateX(50%);display:flex;gap:9px;z-index:60}
+#dots span{width:9px;height:9px;border-radius:50%;background:var(--line);cursor:pointer;transition:.3s}
+#dots span.on{background:var(--orange);transform:scale(1.35)}
+#counter{position:fixed;bottom:26px;right:30px;color:var(--muted);font-size:17px;z-index:60}
 </style>
 </head>
 <body>
-<div class="orn o1"></div><div class="orn o2"></div>
-<div class="box">
-  <div class="num a" style="--d:.1s">١</div>
-  <h1 class="a" style="--d:.2s">اليوم الأول</h1>
-  <div class="a" style="--d:.35s"><span class="soon">قريباً ✦ السلايدات قيد الإعداد</span></div>
-  <p class="a" style="--d:.5s">دورة صناعة المحتوى بالذكاء الاصطناعي - Content Creation Using AI</p>
-  <a class="back a" style="--d:.65s" href="../">العودة للصفحة الرئيسية</a>
+<div id="progress"></div>
+<div id="stage-wrap"><div id="stage">
+
+<!-- ═══════════ S1 الغلاف ═══════════ -->
+<section class="slide" data-name="الغلاف">
+  <div class="orn o1"></div><div class="orn o2"></div><div class="orn o3"></div><div class="orn o4"></div>
+  <div class="cov-grid">
+    <div class="cov-text">
+      <div class="a" style="--d:.05s;display:flex;align-items:center;gap:22px;justify-content:center">
+        <img style="width:64px" src="../assets/img/haydar-logo.png" alt="">
+        <div style="width:1.5px;height:52px;background:var(--line)"></div>
+        <img style="width:84px" src="../assets/img/gocode.png" alt="">
+      </div>
+      <div class="cover-kicker a" style="--d:.25s">دورة صناعة المحتوى بالذكاء الاصطناعي ✦ اليوم الأول</div>
+      <h1 class="cover-title a" style="--d:.4s">العقلُ<br>قبلَ الأداة</h1>
+      <div class="cover-lines"><div class="l"></div><div class="dot"></div><div class="l"></div></div>
+      <p class="cover-sub a" style="--d:.6s">اليوم نتعلّم كيف نفكّر مع الذكاء الاصطناعي<br>قبل أن نطلب منه أن يصنع أي شيء</p>
+    </div>
+    <div class="cov-photo">
+      <div class="ph-wrap">
+        <div class="ph-ring"></div>
+        <div class="ph-circle a" style="--d:.35s;animation-name:pop"></div>
+        <div class="ph-clip a" style="--d:.55s"><img src="../assets/img/haydar.webp" alt=""></div>
+      </div>
+      <div class="ph-name a" style="--d:.85s">أ. حيدر المعاتيق</div>
+      <div class="ph-badge a" style="--d:1.05s">مدرب دولي معتمد في الذكاء الاصطناعي</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ S2 كسر الجليد ═══════════ -->
+<section class="slide" data-name="كسر الجليد">
+  <div class="orn o2"></div><div class="orn o3"></div>
+  <div class="title-row a"><div class="tline"></div><h2 class="slide-title">شوف مشروعك على الشاشة 📱</h2><div class="tline"></div></div>
+  <p class="hook-sub a" style="--d:.15s;margin-top:0">قبل أن أشرح أي شيء - عرّفوني على مشاريعكم، بس بطريقة مختلفة</p>
+  <div class="ice-grid">
+    <div class="ice-steps">
+      <div class="ice-step a" style="--d:.3s"><div class="n">١</div><div><h3>امسح الرمز من جوالك</h3><p>أو اكتب الرابط مباشرة في المتصفح</p></div></div>
+      <div class="ice-step a" style="--d:.5s"><div class="n">٢</div><div><h3>عبِّ النموذج - دقيقتان فقط</h3><p>أسئلة سريعة عن مشروعك وجمهورك</p></div></div>
+      <div class="ice-step a" style="--d:.7s"><div class="n">٣</div><div><h3>طالِع الشاشة الكبيرة 👀</h3><p>مشروعك يظهر لحظياً - بدون اسمك</p></div></div>
+      <a class="scr-btn a" style="--d:.9s" href="../tool/screen/" target="_blank">افتح الشاشة الحية ⟵ <span style="font-size:14px">(للمدرب)</span></a>
+    </div>
+    <div class="qr-card a" style="--d:.45s;animation-name:pop">
+      <img src="../assets/img/qr-tool.svg" alt="QR">
+      <div class="qr-url">haydarvsky.github.io/CCUAi/tool</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ S3 ماذا نتعلم اليوم ═══════════ -->
+<section class="slide" data-name="ماذا نتعلم اليوم">
+  <div class="orn o1"></div><div class="orn o4"></div>
+  <div class="kicker a">ماذا نتعلّم اليوم؟</div>
+  <h2 class="hook-big a" style="--d:.2s">اليوم كله عن شيءٍ واحد:<br><em>كيف تطلب صح</em></h2>
+  <p class="hook-sub a" style="--d:.4s">لو الطلب غلط، النتيجة غلط - مهما كانت الأداة قوية</p>
+  <div class="mind-vs">
+    <div class="mv today a" style="--d:.6s">
+      <span class="tag">اليوم</span>
+      <h3>العقل 🧠</h3>
+      <p>كيف نفكّر مع الذكاء الاصطناعي<br>وكيف نوجّهه بالطريقة الصحيحة</p>
+    </div>
+    <div class="mv rest a" style="--d:.8s">
+      <span class="tag">بقية الأيام</span>
+      <h3>التنفيذ 🛠</h3>
+      <p>صناعة المحتوى الفعلي<br>صور، فيديو، سلايدات - وكل شيء</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ S4 خريطة الأدوات ═══════════ -->
+<section class="slide" data-name="خريطة الأدوات">
+  <div class="orn o3"></div><div class="orn o2"></div>
+  <div class="title-row a"><div class="tline"></div><h2 class="slide-title">خريطة أدوات الذكاء الاصطناعي</h2><div class="tline"></div></div>
+  <div class="lex-grid">
+    <div class="lex a" style="--d:.2s;--lc:#D97706">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div>
+      <h4>نص</h4><p>كتابة، أفكار،<br>عصف ذهني</p>
+      <span class="ex">ChatGPT ✦ Claude</span>
+    </div>
+    <div class="lex a" style="--d:.4s;--lc:#1E7A46">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>
+      <h4>صورة</h4><p>تصاميم، بوسترات،<br>صور منتجات</p>
+      <span class="ex">Midjourney ✦ Lumen Pro</span>
+    </div>
+    <div class="lex a" style="--d:.6s;--lc:#B4513E">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="2" y="5" width="14" height="14" rx="2"/><path d="M16 10l6-3v10l-6-3z"/></svg></div>
+      <h4>فيديو</h4><p>ريلز، إعلانات،<br>مشاهد متحركة</p>
+      <span class="ex">Runway ✦ Sora</span>
+    </div>
+    <div class="lex a" style="--d:.8s;--lc:#083528">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 3v10.5M12 3l-3 3M12 3l3 3"/><rect x="5" y="13" width="14" height="8" rx="2"/><path d="M9 17h6"/></svg></div>
+      <h4>صوت</h4><p>تعليق صوتي،<br>بودكاست</p>
+      <span class="ex">Voiceover AI</span>
+    </div>
+  </div>
+  <p class="hook-sub a" style="--d:1s;margin-top:30px">كلها تشترك في قاعدة واحدة: <b style="color:var(--orange)">جودة الناتج = جودة الطلب</b></p>
+</section>
+
+<!-- ═══════════ S5 لماذا العصف ═══════════ -->
+<section class="slide" data-name="لماذا العصف الذهني">
+  <div class="orn o1"></div><div class="orn o3"></div>
+  <div class="title-row a"><div class="tline"></div><h2 class="slide-title">ليش الذكاء الاصطناعي شريك عصفٍ قوي؟</h2><div class="tline"></div></div>
+  <div class="why-grid">
+    <div class="why a" style="--d:.25s">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2a7 7 0 0 1 7 7c0 2.4-1.2 4-2.5 5.4-.8.8-1.5 2-1.5 3.1h-6c0-1.1-.7-2.3-1.5-3.1C6.2 13 5 11.4 5 9a7 7 0 0 1 7-7z"/><path d="M9 21h6"/></svg></div>
+      <h3>ما عنده خوف<br>من فكرة «غبية»</h3>
+      <p>يرمي لك كمية أفكار بلا تردد<br>ولا إحراج ولا مجاملة</p>
+    </div>
+    <div class="why a" style="--d:.45s">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="3"/></svg></div>
+      <h3>زوايا ما فكرت<br>فيها أصلاً</h3>
+      <p>ما عنده قيودك الذهنية المتعلَّمة<br>فيشوف من اتجاهات جديدة</p>
+    </div>
+    <div class="why a" style="--d:.65s">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M13 2L4.5 13.5H11L10 22l8.5-11.5H12z"/></svg></div>
+      <h3>سرعة<br>خارقة</h3>
+      <p>جلسة عصف تقليدية = ساعة<br>مع الذكاء الاصطناعي = دقائق</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ S6 منفذ × شريك ═══════════ -->
+<section class="slide" data-name="منفذ أم شريك">
+  <div class="orn o2"></div><div class="orn o4"></div>
+  <div class="title-row a"><div class="tline"></div><h2 class="slide-title">منفِّذ… أم شريك تفكير؟</h2><div class="tline"></div></div>
+  <div class="vs-wrap">
+    <div class="vs-col a" style="--d:.25s">
+      <h3>🤖 منفِّذ يعطيك اللي تطلبه</h3>
+      <ul>
+        <li><span class="mark x">✗</span>«أعطني أفكار تسويقية» - وبس</li>
+        <li><span class="mark x">✗</span>يرد بأفكار عامة تنفع لأي أحد</li>
+        <li><span class="mark x">✗</span>تاخذ أول إجابة وتمشي</li>
+      </ul>
+    </div>
+    <div class="vs-mid a" style="--d:.55s"><div class="vs-badge">VS</div></div>
+    <div class="vs-col ai a" style="--d:.4s">
+      <h3>🧠 شريك يوسّع أفقك</h3>
+      <ul>
+        <li><span class="mark ok">✓</span>تعطيه دوراً وسياقاً وهدفاً واضحاً</li>
+        <li><span class="mark ok">✓</span>يرد بأفكار تخص مشروعك أنت</li>
+        <li><span class="mark ok">✓</span>تحاوره: «طوّر الفكرة الثالثة»</li>
+      </ul>
+    </div>
+  </div>
+  <p class="vs-punch a" style="--d:.7s">والفرق بينهما ليس الأداة… <em>الفرق هو كيف تسأل</em></p>
+</section>
+
+<!-- ═══════════ S7 تجربة البرومبت الضعيف ═══════════ -->
+<section class="slide" data-name="البرومبت الضعيف">
+  <div class="orn o1"></div><div class="orn o3"></div>
+  <div class="kicker a">تجربة حية 🔴</div>
+  <h2 class="slide-title a" style="--d:.15s">خلونا نجرب أضعف طلب ممكن</h2>
+  <div class="pr-box a" style="--d:.3s">«<b>أعطني أفكار حملة تسويقية لمنتج قهوة</b>»</div>
+  <button class="rev-btn a" style="--d:.5s" id="weak-btn">شغّلناه… شوف النتيجة</button>
+  <div class="weak-res" id="weak-res">
+    <ul>
+      <li>انشر صوراً جميلة لمنتجاتك بانتظام</li>
+      <li>اعمل مسابقة واطلب من المتابعين عمل تاق لأصدقائهم</li>
+      <li>قدّم خصومات في نهاية الأسبوع</li>
+      <li>تعاون مع مؤثرين في مجالك</li>
+    </ul>
+  </div>
+  <div class="weak-verdict" id="weak-verdict">أفكار <em>باهتة وعامة</em> تنفع لأي مشروع بالعالم… <b style="color:var(--orange)">والسبب مو الأداة - السبب الطلب</b></div>
+</section>
+
+<!-- ═══════════ S8 استراحة ═══════════ -->
+<section class="slide" data-name="استراحة">
+  <div class="orn o1"></div><div class="orn o2"></div><div class="orn o3"></div><div class="orn o4"></div>
+  <div class="brk-cup a">☕</div>
+  <h2 class="brk-title a" style="--d:.2s">استراحة</h2>
+  <p class="brk-sub a" style="--d:.4s">نرجع بعد ١٥ دقيقة - والجاي أهم جزء باليوم كله</p>
+</section>
+
+<!-- ═══════════ S9 العناصر السبعة ═══════════ -->
+<section class="slide" data-name="العناصر السبعة" style="padding-top:44px;justify-content:flex-start">
+  <div class="orn o3"></div>
+  <div class="title-row a" style="margin-top:6px"><div class="tline"></div><h2 class="slide-title">برومبت العصف الذهني الصحيح - ٧ عناصر</h2><div class="tline"></div></div>
+  <div class="el-chips a" style="--d:.15s" id="el-chips"></div>
+  <div class="el-prompt a" style="--d:.3s" id="el-prompt">
+    <span class="tag" data-k="e1">أنت خبير تسويق رقمي متخصص في المشاريع الصغيرة والمقاهي.</span>
+    <span class="tag" data-k="e2">مشروعي محمصة قهوة مختصة اسمها «بُن الديرة»، نحمّص محلياً ونبيع أونلاين.</span>
+    <span class="tag" data-k="e3">جمهوري شباب ٢٠-٣٠ مهتمون بالقهوة المختصة، وأغلبهم على إنستقرام.</span>
+    <span class="tag" data-k="e4">بأسلوب جريء وفيه لمسة فكاهة خفيفة.</span>
+    <span class="tag" data-k="e5">أبي أفكار محتوى تزيد التفاعل، مو بيع مباشر.</span>
+    <span class="tag" data-k="e6">أعطني ١٠ أفكار، كل فكرة بسطر واحد.</span>
+    <span class="tag" data-k="e7">بدون كلمات مستهلكة مثل «الأفضل» و«الأروع».</span>
+  </div>
+  <div class="el-info" id="el-info">اضغط أي عنصر فوق - وشوف جملته تضيء داخل البرومبت 👆</div>
+</section>
+
+<!-- ═══════════ S10 ارجع لبطاقتك ═══════════ -->
+<section class="slide" data-name="ارجع لبطاقتك">
+  <div class="orn o2"></div><div class="orn o4"></div>
+  <div class="title-row a"><div class="tline"></div><h2 class="slide-title">نصف برومبتك جاهز… من بطاقتك! 🎯</h2><div class="tline"></div></div>
+  <p class="hook-sub a" style="--d:.15s;margin-top:0">ارجع لبطاقتك من نشاط البداية - ثلاثة عناصر تنسحب منها مباشرة</p>
+  <div class="card-link">
+    <div class="mini-card a" style="--d:.3s">
+      <div class="pn">بطاقة مشروعك 📇</div>
+      <div class="tags"><span class="tg">طبيعة المشروع</span><span class="tg">مرحلته</span></div>
+      <div class="aud">🎯 الفئة العمرية ✦ المنصة الأساسية</div>
+      <div class="aud" style="margin-top:6px">✅/❌ شعار ✦ ✅/❌ خطة تسويقية</div>
+    </div>
+    <div class="cl-arrow a" style="--d:.5s">⟵</div>
+    <div class="cl-list">
+      <div class="cl-item a" style="--d:.55s;--cc:#1E7A46"><div class="num">٢</div><p><b>السياق:</b> طبيعة مشروعك ومرحلته - جاهزة من البطاقة</p></div>
+      <div class="cl-item a" style="--d:.7s;--cc:#B4513E"><div class="num">٣</div><p><b>الفئة المستهدفة:</b> العمر + الجمهور + المنصة - جاهزة من البطاقة</p></div>
+      <div class="cl-item a" style="--d:.85s;--cc:#D97706"><div class="num">٥</div><p><b>الهدف:</b> تحديك التسويقي اللي كتبته - هو نفسه هدفك</p></div>
+    </div>
+  </div>
+  <p class="hook-sub a" style="--d:1s;margin-top:26px">بدل ما تخترع من الصفر… <b style="color:var(--orange)">بياناتك الحقيقية تدخل البرومبت مباشرة</b></p>
+</section>
+
+<!-- ═══════════ S11 التمرين التدريجي ═══════════ -->
+<section class="slide" data-name="نبني البرومبت" style="padding-top:44px;justify-content:flex-start">
+  <div class="orn o3"></div>
+  <div class="title-row a" style="margin-top:6px"><div class="tline"></div><h2 class="slide-title">نبني البرومبت… عنصراً عنصراً</h2><div class="tline"></div></div>
+  <p class="hook-sub a" style="--d:.1s;margin-top:0;font-size:21px">نشغّل الأداة بعد كل إضافة - وشوفوا النتيجة كيف تتحسن</p>
+  <div class="bld-wrap">
+    <div class="bld-prompt" id="bld-prompt">
+      <span class="bld-seg on" style="background:#EAE2D2">أعطني أفكار تسويقية لقهوة.</span>
+      <span class="bld-seg" data-s="1" style="background:#F6E7CE">&nbsp;أنت خبير تسويق رقمي متخصص في المقاهي والمشاريع الصغيرة.</span>
+      <span class="bld-seg" data-s="2" style="background:#DEE8E3">&nbsp;مشروعي محمصة «بُن الديرة»، جمهوري شباب ٢٠-٣٠ على إنستقرام.</span>
+      <span class="bld-seg" data-s="3" style="background:#F3DAD3">&nbsp;بأسلوب جريء وفيه فكاهة خفيفة، والهدف تفاعل مو بيع مباشر.</span>
+      <span class="bld-seg" data-s="4" style="background:#E3E0D3">&nbsp;أعطني ١٠ أفكار بسطر واحد لكل فكرة، بدون كلمات مستهلكة.</span>
+    </div>
+    <div class="bld-side">
+      <div class="q-meter">
+        <h4>جودة النتيجة المتوقعة</h4>
+        <div class="q-track"><div class="q-fill" id="q-fill"></div></div>
+        <div class="q-cap" id="q-cap">برومبت عام - نتيجة عامة تنفع لأي أحد</div>
+      </div>
+      <button class="bld-btn" id="bld-btn">أضِف العنصر التالي ＋</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ S12 المقارنة ═══════════ -->
+<section class="slide" data-name="قبل وبعد">
+  <div class="orn o1"></div><div class="orn o4"></div>
+  <div class="title-row a"><div class="tline"></div><h2 class="slide-title">نفس الأداة… طلبان مختلفان</h2><div class="tline"></div></div>
+  <div class="cmp-grid">
+    <div class="cmp before a" style="--d:.25s">
+      <h3>قبل - برومبت من سطر واحد</h3>
+      <ul>
+        <li>انشر صوراً جميلة بانتظام</li>
+        <li>اعمل مسابقة للمتابعين</li>
+        <li>قدّم خصومات نهاية الأسبوع</li>
+      </ul>
+    </div>
+    <div class="cmp after a" style="--d:.45s">
+      <h3>بعد - برومبت بسبعة عناصر</h3>
+      <ul>
+        <li>سلسلة ريلز «أخطاء تسويها بقهوتك البيتية» بلمسة ساخرة</li>
+        <li>تحدي ستوري: «كم تصرف على القهوة بالشهر؟» بحاسبة تفاعلية</li>
+        <li>تايم لابس «رحلة الحبة» من المحمصة إلى باب بيت العميل</li>
+      </ul>
+    </div>
+  </div>
+  <p class="vs-punch a" style="--d:.65s">الأداة ما تغيّرت… <em>الطلب هو اللي تغيّر</em></p>
+</section>
+
+<!-- ═══════════ S13 التمرين الختامي ═══════════ -->
+<section class="slide" data-name="التمرين الختامي">
+  <div class="orn o2"></div><div class="orn o3"></div>
+  <div class="kicker a">التطبيق العملي 💪</div>
+  <h2 class="slide-title a" style="--d:.15s">دورك الآن - برومبت مشروعك أنت</h2>
+  <div class="fx-steps">
+    <div class="fx a" style="--d:.3s">
+      <div class="n">١</div>
+      <h3>اكتب برومبتك الكامل</h3>
+      <p>بالعناصر السبعة، مستخدماً بيانات بطاقتك من نشاط البداية</p>
+    </div>
+    <div class="fx a" style="--d:.5s">
+      <div class="n">٢</div>
+      <h3>شغّله الآن</h3>
+      <p>في ChatGPT أو Claude من جوالك - مباشرة</p>
+    </div>
+    <div class="fx a" style="--d:.7s">
+      <div class="n">٣</div>
+      <h3>اعرض ٣ أفكار</h3>
+      <p>اختر أقوى ثلاث أفكار طلعت لك وشاركها مع المجموعة</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ S14 المعيار ═══════════ -->
+<section class="slide" data-name="معيار التقييم">
+  <div class="orn o1"></div><div class="orn o3"></div>
+  <div class="title-row a"><div class="tline"></div><h2 class="slide-title">قيّم برومبتك - نقطة لكل عنصر</h2><div class="tline"></div></div>
+  <div class="chk-grid a" style="--d:.2s" id="chk-grid">
+    <div class="chk"><div class="bx"></div><p>دور واضح للأداة</p></div>
+    <div class="chk"><div class="bx"></div><p>سياق كافٍ عن المشروع</p></div>
+    <div class="chk"><div class="bx"></div><p>فئة مستهدفة محددة بدقة</p></div>
+    <div class="chk"><div class="bx"></div><p>أسلوب ونبرة محددة</p></div>
+    <div class="chk"><div class="bx"></div><p>هدف واضح من الأفكار</p></div>
+    <div class="chk"><div class="bx"></div><p>صيغة إخراج محددة</p></div>
+    <div class="chk"><div class="bx"></div><p>قيود أو ممنوعات موضوعة</p></div>
+  </div>
+  <div class="chk-score a" style="--d:.4s">النتيجة: <b id="chk-n">٠</b> / ٧</div>
+</section>
+
+<!-- ═══════════ S15 الختام ═══════════ -->
+<section class="slide" data-name="الختام">
+  <div class="orn o1"></div><div class="orn o2"></div><div class="orn o3"></div><div class="orn o4"></div>
+  <div class="close-logos a">
+    <img src="../assets/img/haydar-logo.png" style="height:80px" alt="">
+    <div class="dv"></div>
+    <img src="../assets/img/gocode.png" alt="">
+  </div>
+  <h1 class="close-title a" style="--d:.2s">اليوم فكّرنا…</h1>
+  <p class="close-sub a" style="--d:.45s">تعلمنا أن جودة الناتج تبدأ من جودة الطلب<br>وأن الذكاء الاصطناعي <em>شريك تفكير</em> - لا مجرد منفّذ</p>
+  <div class="close-tmw a" style="--d:.7s">بكرة: <b>ننفّذ!</b> نبدأ صناعة المحتوى الفعلي 🚀</div>
+</section>
+
+</div></div>
+
+<div id="nav">
+  <button id="nprev" title="السابق">›</button>
+  <button id="nnext" title="التالي">‹</button>
 </div>
+<div id="dots"></div>
+<div id="counter"></div>
+
+<script>
+const slides=[...document.querySelectorAll('.slide')];
+let cur=0;
+const dots=document.getElementById('dots');
+slides.forEach((s,i)=>{const d=document.createElement('span');d.onclick=()=>go(i);dots.appendChild(d);});
+function toArabic(n){return String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);}
+function go(i){
+  if(i<0||i>=slides.length)return;
+  slides[cur].classList.remove('active');
+  cur=i;
+  const s=slides[cur];
+  s.classList.remove('active');
+  void s.offsetWidth;
+  s.classList.add('active');
+  document.getElementById('progress').style.width=((cur+1)/slides.length*100)+'%';
+  [...dots.children].forEach((d,j)=>d.classList.toggle('on',j===cur));
+  document.getElementById('counter').textContent=toArabic(cur+1)+' / '+toArabic(slides.length);
+  location.hash=cur+1;
+}
+document.getElementById('nnext').onclick=()=>go(cur+1);
+document.getElementById('nprev').onclick=()=>go(cur-1);
+addEventListener('keydown',e=>{
+  if(['ArrowLeft','PageDown',' '].includes(e.key)){e.preventDefault();go(cur+1);}
+  if(['ArrowRight','PageUp'].includes(e.key)){e.preventDefault();go(cur-1);}
+  if(e.key==='Home')go(0); if(e.key==='End')go(slides.length-1);
+});
+let tx=null;
+addEventListener('touchstart',e=>tx=e.touches[0].clientX);
+addEventListener('touchend',e=>{if(tx===null)return;const dx=e.changedTouches[0].clientX-tx;if(dx>60)go(cur+1);else if(dx<-60)go(cur-1);tx=null;});
+function fit(){
+  const s=document.getElementById('stage');
+  const k=Math.min(innerWidth/1280,innerHeight/720);
+  s.style.transform='scale('+k+')';
+}
+addEventListener('resize',fit);fit();
+
+/* S7 weak prompt reveal */
+const weakBtn=document.getElementById('weak-btn');
+weakBtn.addEventListener('click',()=>{
+  const res=document.getElementById('weak-res');
+  if(!res.classList.contains('on')){
+    res.classList.add('on');
+    weakBtn.textContent='وش رايكم فيها؟';
+  }else{
+    document.getElementById('weak-verdict').classList.add('on');
+    weakBtn.style.display='none';
+  }
+});
+
+/* S9 seven elements interactive */
+const ELS=[
+ ['e1','الدور','#D97706','مين يتكلم؟ حدد تخصص الأداة - «أنت خبير تسويق رقمي متخصص بالمقاهي» تعطيك غير «أعطني أفكار» بمراحل.'],
+ ['e2','السياق','#1E7A46','وش الخلفية؟ اسم مشروعك وطبيعته ومرحلته - التفاصيل اللي تخلي الأفكار تفصيلاً على مقاسك.'],
+ ['e3','الفئة المستهدفة','#B4513E','مين يقرأ ويشوف؟ العمر والاهتمامات والمنصة - تنسحب مباشرة من بطاقتك في نشاط البداية!'],
+ ['e4','الأسلوب','#83705C','كيف يحس القارئ؟ جريء؟ رسمي؟ فكاهي؟ النبرة تغيّر شكل كل فكرة تطلع لك.'],
+ ['e5','الهدف','#C2410C','وش تبي تحقق؟ تفاعل؟ وعي بالبراند؟ بيع مباشر؟ الهدف يوجّه بوصلة الأفكار كلها.'],
+ ['e6','صيغة الإخراج','#0F5132','شكل الرد؟ عدد الأفكار وطول كل وحدة - يرتب الناتج من أول مرة ويوفّر عليك التنقيح.'],
+ ['e7','القيود','#7A3B2E','الممنوعات؟ كلمات مستهلكة، أفكار مكررة، أي شيء ما تبيه - حط السياج قبل لا يطلع الرد.']
+];
+const chipsBox=document.getElementById('el-chips');
+ELS.forEach(([k,t,c],i)=>{
+  chipsBox.insertAdjacentHTML('beforeend',
+    `<div class="el-chip" data-k="${k}" style="--ec:${c}"><span class="num">${toArabic(i+1)}</span>${t}</div>`);
+});
+const elChips=[...document.querySelectorAll('.el-chip')];
+const elInfo=document.getElementById('el-info');
+function elSelect(k){
+  const e=ELS.find(x=>x[0]===k);
+  elChips.forEach(c=>c.classList.toggle('on',c.dataset.k===k));
+  document.querySelectorAll('#el-prompt .tag').forEach(t=>{
+    t.classList.toggle('lit',t.dataset.k===k);
+    if(t.dataset.k===k)t.style.setProperty('--tc',e[2]);
+  });
+  elInfo.classList.add('act');
+  elInfo.style.setProperty('--ig',e[2]);
+  elInfo.innerHTML='<span class="inf-t">'+e[1]+':</span><span>'+e[3]+'</span>';
+}
+elChips.forEach(ch=>ch.addEventListener('click',()=>elSelect(ch.dataset.k)));
+document.querySelectorAll('#el-prompt .tag').forEach(t=>t.addEventListener('click',()=>elSelect(t.dataset.k)));
+
+/* S11 builder */
+const BLD_CAPS=[
+ 'برومبت عام - نتيجة عامة تنفع لأي أحد',
+ '＋الدور: صار يتكلم خبير مختص، مو موظف استقبال',
+ '＋السياق والفئة: الأفكار صارت عن مشروعك أنت وجمهورك أنت',
+ '＋الأسلوب والهدف: نبرة مضبوطة واتجاه واضح - تفاعل مو بيع',
+ '＋الصيغة والقيود: ١٠ أفكار نظيفة جاهزة - بلا حشو ولا كلام مستهلك'
+];
+const BLD_W=[12,32,58,80,100];
+let bstep=0;
+const bldBtn=document.getElementById('bld-btn');
+bldBtn.addEventListener('click',()=>{
+  if(bstep>=4)return;
+  bstep++;
+  document.querySelector(`.bld-seg[data-s="${bstep}"]`).classList.add('on');
+  document.getElementById('q-fill').style.width=BLD_W[bstep]+'%';
+  document.getElementById('q-cap').textContent=BLD_CAPS[bstep];
+  if(bstep===4){bldBtn.textContent='✓ اكتمل البرومبت';bldBtn.disabled=true;bldBtn.style.background='#1E7A46';}
+});
+
+/* S14 checklist */
+document.querySelectorAll('.chk').forEach(c=>c.addEventListener('click',()=>{
+  c.classList.toggle('on');
+  c.querySelector('.bx').textContent=c.classList.contains('on')?'✓':'';
+  document.getElementById('chk-n').textContent=toArabic(document.querySelectorAll('.chk.on').length);
+}));
+
+/* demo hook للتحقق الآلي */
+if(location.hash.includes('demo')){setTimeout(()=>{
+  weakBtn.click();weakBtn.click();
+  elSelect('e3');
+  for(let i=0;i<4;i++)bldBtn.click();
+  document.querySelectorAll('.chk').forEach((c,i)=>{if(i<5)c.click();});
+},600);}
+const h=parseInt(location.hash.slice(1));
+go(!isNaN(h)&&h>=1&&h<=slides.length?h-1:0);
+</script>
 </body>
 </html>
