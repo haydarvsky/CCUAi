@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>اليوم الثاني - لبراندك صوت | صناعة المحتوى بالذكاء الاصطناعي</title>
+<title>اليوم الثاني - هوية تُسمع | صناعة المحتوى بالذكاء الاصطناعي</title>
 <link rel="stylesheet" href="../assets/css/theme.css">
 <link rel="icon" type="image/png" href="../assets/img/haydar-logo.png">
 <style>
@@ -48,22 +48,24 @@ html,body{height:100%;overflow:hidden}
 .ph-badge{display:inline-block;margin-top:8px;background:var(--orange);color:#fff;font-weight:700;font-size:17.5px;border-radius:100px;padding:7px 26px;box-shadow:0 8px 20px rgba(217,119,6,.3)}
 
 /* البطاقات القلابة */
-.fq-grid{display:grid;gap:22px;margin-top:26px}
+.fq-grid{display:grid;gap:22px;margin-top:24px}
 .fq{perspective:1200px;cursor:pointer}
 .fq-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
 .fq.open .fq-inner{transform:rotateY(180deg)}
-.fq-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px 24px;text-align:center}
+.fq-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 22px;text-align:center}
 .fq-front{background:#fff;border:1.5px solid var(--line)}
 .fq-front .post{font-size:19.5px;color:var(--body);line-height:1.8}
 .fq-front .hint{margin-top:14px;font-size:14.5px;color:var(--orange);font-weight:700}
-.fq-front .bn{font-size:27px;font-weight:800;color:var(--green)}
-.fq-front .bq{font-size:17px;color:var(--muted);font-weight:700;margin-top:8px;line-height:1.6}
+.fq-front .blogo{max-width:78%;max-height:96px;object-fit:contain}
+.fq-front .bn{font-size:19px;font-weight:800;color:var(--green);margin-top:12px}
+.fq-front .bq{font-size:15px;color:var(--muted);font-weight:700;margin-top:4px;line-height:1.55}
 .fq-back{transform:rotateY(180deg);background:var(--fc);color:#fff}
-.fq-back .av{width:60px;height:60px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:30px;margin-bottom:10px}
-.fq-back .nm{font-size:23px;font-weight:800;line-height:1.35}
-.fq-back .tip{font-size:16px;margin-top:8px;opacity:.92;line-height:1.65}
+.fq-back .av{width:58px;height:58px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:29px;margin-bottom:10px}
+.fq-back .nm{font-size:22px;font-weight:800;line-height:1.35}
+.fq-back .tip{font-size:15.5px;margin-top:8px;opacity:.92;line-height:1.6}
+.rights{margin-top:14px;font-size:13.5px;color:var(--muted);font-weight:700;text-align:center}
 
-/* mind-vs (أمس/اليوم) */
+/* mind-vs */
 .mind-vs{display:grid;grid-template-columns:1fr 1fr;gap:24px;width:1000px;margin-top:40px}
 .mv{border-radius:18px;padding:24px 28px;text-align:center}
 .mv.today{background:var(--green);color:var(--cream)}
@@ -102,6 +104,66 @@ html,body{height:100%;overflow:hidden}
 .pstep p{font-size:16px;color:var(--muted);font-weight:700;margin-top:4px;line-height:1.5}
 .pstep:not(:last-child)::after{content:'⟵';position:absolute;left:-14px;top:28px;font-size:26px;color:var(--orange)}
 
+/* التعريف العلمي */
+.def-box{width:1080px;background:var(--green);border-radius:22px;padding:30px 44px;text-align:center;margin-top:26px;position:relative}
+.def-box::before{content:'❞';position:absolute;top:-4px;right:22px;font-size:70px;color:#E9A94F;opacity:.8}
+.def-box p{font-size:29px;color:var(--cream);line-height:1.8;font-weight:700}
+.def-box p b{color:#E9A94F}
+.formula{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:26px;flex-wrap:wrap;width:1100px}
+.fchip{background:var(--card);border:1.5px solid var(--line);border-radius:100px;padding:12px 28px;font-size:20px;font-weight:800;color:var(--green)}
+.fop{font-size:30px;font-weight:800;color:var(--orange)}
+.fres{background:var(--orange);color:#fff;border-radius:100px;padding:12px 30px;font-size:20px;font-weight:800;box-shadow:0 10px 24px rgba(217,119,6,.3)}
+.golden{margin-top:26px;background:var(--orange-soft);border:1.5px dashed var(--orange);border-radius:16px;padding:14px 36px;font-size:21.5px;font-weight:800;color:var(--orange)}
+
+/* الفلسفة */
+.phil-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;width:1130px;margin-top:32px}
+.phil{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px 22px;text-align:center;position:relative;overflow:hidden}
+.phil:after{content:'';position:absolute;top:0;right:0;left:0;height:4px;background:var(--pc)}
+.phil .ic{width:70px;height:70px;border-radius:50%;background:var(--pc);display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 12px}
+.phil h3{color:var(--green);font-size:23px;font-weight:800;line-height:1.4}
+.phil .en{font-size:14px;color:var(--muted);font-weight:700;font-family:Arial,'Sakkal Saad';margin-top:2px}
+.phil p{font-size:17.5px;color:var(--body);margin-top:10px;line-height:1.7}
+.phil .src{margin-top:10px;display:inline-block;background:var(--cream);border:1px solid var(--line);border-radius:100px;padding:4px 16px;font-size:13.5px;color:var(--orange);font-weight:700}
+
+/* السلم */
+.ladder{display:flex;align-items:flex-end;gap:16px;width:1120px;margin-top:30px;height:360px}
+.lstep{flex:1;border-radius:16px 16px 0 0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:18px 12px;color:#fff;text-align:center;position:relative}
+.lstep .n{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.22);font-weight:800;font-size:19px;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.lstep h3{font-size:22px;font-weight:800;line-height:1.3}
+.lstep p{font-size:14.5px;margin-top:6px;opacity:.92;line-height:1.55;font-weight:700}
+.lstep:not(:last-child)::after{content:'⬅';position:absolute;left:-19px;top:-26px;font-size:22px;color:var(--orange)}
+
+/* الصوت × النبرة */
+.vt-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;width:1120px;margin-top:24px}
+.vt{border-radius:18px;padding:22px 26px}
+.vt.voice{background:var(--green)}
+.vt.tone{background:var(--card);border:1px solid var(--line)}
+.vt h3{font-size:24px;font-weight:800;display:flex;align-items:center;gap:10px}
+.vt.voice h3{color:#E9A94F}
+.vt.tone h3{color:var(--green)}
+.vt .sub{font-size:17px;font-weight:700;margin-top:4px}
+.vt.voice .sub{color:#D5DCD8}
+.vt.tone .sub{color:var(--muted)}
+.vt ul{list-style:none;margin-top:10px}
+.vt li{font-size:17.5px;padding:5px 0;display:flex;gap:9px;line-height:1.55}
+.vt.voice li{color:#EDE7DC}
+.vt.tone li{color:var(--body)}
+.vt li::before{content:'✦'}
+.vt.voice li::before{color:#E9A94F}
+.vt.tone li::before{color:var(--orange)}
+.bubbles{display:grid;grid-template-columns:1fr 1fr;gap:20px;width:1120px;margin-top:18px}
+.bb{background:#fff;border:1.5px solid var(--line);border-radius:16px;border-top-right-radius:4px;padding:15px 22px}
+.bb .sit{font-size:14.5px;font-weight:800;color:var(--orange);margin-bottom:4px}
+.bb p{font-size:17.5px;color:var(--body);line-height:1.7}
+
+/* الأرقام */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;width:1040px;margin-top:34px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:30px 28px;text-align:center;position:relative;overflow:hidden}
+.stat:after{content:'';position:absolute;top:0;right:0;left:0;height:4px;background:var(--sc)}
+.stat .v{font-size:96px;font-weight:800;color:var(--sc);line-height:1.1}
+.stat h3{font-size:22px;font-weight:800;color:var(--green);margin-top:8px;line-height:1.5}
+.stat .src{margin-top:12px;display:inline-block;background:var(--cream);border:1px solid var(--line);border-radius:100px;padding:5px 20px;font-size:14.5px;color:var(--muted);font-weight:700}
+
 /* عدسة التحليل */
 .lens-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;width:1140px;margin-top:34px}
 .lens{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 18px;text-align:center;position:relative;overflow:hidden}
@@ -110,13 +172,23 @@ html,body{height:100%;overflow:hidden}
 .lens h4{color:var(--green);font-weight:800;font-size:22px;line-height:1.35}
 .lens p{font-size:16px;color:var(--body);margin-top:8px;line-height:1.6}
 
+/* تحليل الشعار */
+.anot{position:relative;width:1140px;height:470px;margin-top:14px}
+.anot .logo-c{position:absolute;top:50%;left:50%;margin-left:-165px;margin-top:-165px;width:330px;height:330px;background:#fff;border:1.5px solid var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 20px 50px rgba(8,53,40,.12)}
+.anot .logo-c img{width:240px}
+.call{position:absolute;width:300px;background:var(--card);border:1.5px solid var(--ac);border-radius:16px;padding:14px 18px}
+.call h4{font-size:19px;font-weight:800;color:var(--ac);display:flex;align-items:center;gap:8px}
+.call p{font-size:15.5px;color:var(--body);line-height:1.6;margin-top:4px}
+.cline{position:absolute;border-top:2px dashed var(--ac);opacity:.65}
+
 /* براندي */
-.me-grid{display:grid;grid-template-columns:340px 1fr;gap:34px;width:1130px;align-items:center;margin-top:24px}
-.me-card{background:var(--green);border-radius:22px;padding:28px 26px;text-align:center;color:var(--cream)}
-.me-card img{width:150px;border-radius:50%;background:var(--card)}
-.me-card .nm{font-size:26px;font-weight:800;margin-top:10px}
-.me-tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:12px}
-.me-tags span{background:rgba(250,246,239,.12);border:1px solid rgba(250,246,239,.25);color:#E9A94F;border-radius:100px;padding:5px 16px;font-size:15.5px;font-weight:700}
+.me-grid{display:grid;grid-template-columns:360px 1fr;gap:34px;width:1140px;align-items:center;margin-top:24px}
+.me-card{background:var(--green);border-radius:22px;padding:26px;text-align:center;color:var(--cream)}
+.me-card .lbox{background:var(--cream);border-radius:16px;padding:20px;display:flex;align-items:center;justify-content:center}
+.me-card .lbox img{width:170px}
+.me-card .nm{font-size:25px;font-weight:800;margin-top:12px}
+.me-tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px}
+.me-tags span{background:rgba(250,246,239,.12);border:1px solid rgba(250,246,239,.25);color:#E9A94F;border-radius:100px;padding:5px 15px;font-size:15px;font-weight:700}
 .qs{display:flex;flex-direction:column;gap:13px}
 .qcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 22px;display:flex;gap:14px;align-items:center}
 .qcard .num{min-width:36px;height:36px;border-radius:50%;background:var(--cc);color:#fff;font-weight:800;font-size:18px;display:flex;align-items:center;justify-content:center}
@@ -210,9 +282,9 @@ html,body{height:100%;overflow:hidden}
         <img style="width:84px" src="../assets/img/gocode.png" alt="">
       </div>
       <div class="cover-kicker a" style="--d:.25s">دورة صناعة المحتوى بالذكاء الاصطناعي ✦ اليوم الثاني</div>
-      <h1 class="cover-title a" style="--d:.4s">لبراندك<br>صوت</h1>
+      <h1 class="cover-title a" style="--d:.4s">هويةٌ<br>تُسمَع</h1>
       <div class="cover-lines"><div class="l"></div><div class="dot"></div><div class="l"></div></div>
-      <p class="cover-sub a" style="--d:.6s">اليوم نكتشف صوت براندك…<br>وننتج أول محتوى حقيقي جاهز للنشر</p>
+      <p class="cover-sub a" style="--d:.6s">صوت البراند: كيف يتكلم مشروعك بشخصيةٍ لا تُشبه أحداً…<br>ثم ننتج بها أول محتوى حقيقي جاهز للنشر</p>
     </div>
     <div class="cov-photo">
       <div class="ph-wrap">
@@ -275,10 +347,10 @@ html,body{height:100%;overflow:hidden}
 </section>
 
 <!-- ═══════════ S3 الكشف ═══════════ -->
-<section class="slide" data-name="هذا هو Brand Voice">
+<section class="slide" data-name="هذا هو صوت البراند">
   <div class="orn o1"></div><div class="orn o4"></div>
   <h2 class="hook-big a">نفس المنتج بالضبط…<br>تغيّرت الكلمات <em>فتغيّرت الشخصية</em></h2>
-  <p class="hook-sub a" style="--d:.3s">هذا اسمه <b style="color:var(--orange);font-family:Arial,'Sakkal Saad'">Brand Voice</b> - صوت البراند<br>وهو موضوعنا الأساسي اليوم</p>
+  <p class="hook-sub a" style="--d:.3s">هذا اسمه <b style="color:var(--orange);font-family:Arial,'Sakkal Saad'">Brand Voice</b> - صوت البراند<br>وقبل أن نصنعه لمشاريعكم… لازم نفهمه فهماً علمياً</p>
 </section>
 
 <!-- ═══════════ S4 أمس واليوم ═══════════ -->
@@ -295,7 +367,7 @@ html,body{height:100%;overflow:hidden}
     <div class="mv today a" style="--d:.55s">
       <span class="tag">اليوم</span>
       <h3>الإنتاج 🎬</h3>
-      <p>من الفكرة إلى محتوى جاهز ننشره فعلاً<br>بصوتٍ يخص براندك وحده</p>
+      <p>نفهم صوت البراند علمياً… ثم ننتج به<br>محتوى جاهزاً ننشره فعلاً</p>
     </div>
   </div>
 </section>
@@ -340,10 +412,127 @@ html,body{height:100%;overflow:hidden}
   <p class="hook-sub a" style="--d:1s;margin-top:40px">كل خطوة هنا تقف على <b style="color:var(--orange)">إطار العناصر السبعة</b> اللي أتقنّاه أمس</p>
 </section>
 
-<!-- ═══════════ S7 عدسة التحليل ═══════════ -->
+<!-- ═══════════ S7 التعريف العلمي ═══════════ -->
+<section class="slide" data-name="التعريف العلمي">
+  <div class="orn o3"></div><div class="orn o4"></div>
+  <div class="kicker a">المقدمة النظرية ١/٣ 📖</div>
+  <h2 class="slide-title a" style="--d:.15s">ما هو صوت البراند… علمياً؟</h2>
+  <div class="def-box a" style="--d:.3s">
+    <p>الشخصيةُ اللغويةُ <b>الثابتة</b> التي يتحدث بها مشروعك في كل مكان -<br>في البوست، والرد على التعليق، والإعلان… وحتى رسالة الاعتذار</p>
+  </div>
+  <div class="formula a" style="--d:.5s">
+    <span class="fchip">شخصية ثابتة</span><span class="fop">＋</span>
+    <span class="fchip">لغة مميزة</span><span class="fop">＋</span>
+    <span class="fchip">اتساق في كل قناة</span><span class="fop">=</span>
+    <span class="fres">هوية تُعرَف من الكلام وحده</span>
+  </div>
+  <div class="golden a" style="--d:.7s">🏆 الاختبار الذهبي: غطِّ الشعار… هل يعرفونك من كلامك؟</div>
+</section>
+
+<!-- ═══════════ S8 الفلسفة ═══════════ -->
+<section class="slide" data-name="الفلسفة">
+  <div class="orn o1"></div><div class="orn o3"></div>
+  <div class="kicker a">المقدمة النظرية ٢/٣ 🧠</div>
+  <h2 class="slide-title a" style="--d:.15s">الفلسفة: ليش الصوت يشتغل أصلاً؟</h2>
+  <div class="phil-grid">
+    <div class="phil a" style="--d:.3s;--pc:#D97706">
+      <div class="ic">🧠</div>
+      <h3>التشخيص</h3>
+      <div class="en">Anthropomorphism</div>
+      <p>أدمغتنا مبرمجة تتعامل مع البراندات كأشخاص - نحكم عليها كما نحكم على الناس: ودود؟ متعالٍ؟ صادق؟</p>
+      <span class="src">جينيفر آكر - أبعاد شخصية البراند</span>
+    </div>
+    <div class="phil a" style="--d:.5s;--pc:#1E7A46">
+      <div class="ic">🔁</div>
+      <h3>أثر الألفة</h3>
+      <div class="en">Mere Exposure Effect</div>
+      <p>التعرّض المتكرر لنفس الصوت يولّد الألفة… والألفة تولّد الميل والثقة - بشرط الاتساق</p>
+      <span class="src">روبرت زايونس - أثر التعرض المجرد</span>
+    </div>
+    <div class="phil a" style="--d:.7s;--pc:#B4513E">
+      <div class="ic">🎯</div>
+      <h3>التمييز</h3>
+      <div class="en">Distinctiveness</div>
+      <p>في سوقٍ تتشابه منتجاته… الصوت أرخص ميزة تنافسية وأصعبها تقليداً - المنتج يُنسَخ، الشخصية لا</p>
+      <span class="src">قاعدة الأصول المميزة للبراند</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ S9 الآلية ═══════════ -->
+<section class="slide" data-name="الآلية">
+  <div class="orn o2"></div><div class="orn o4"></div>
+  <div class="kicker a">المقدمة النظرية ٣/٣ ⚙️</div>
+  <h2 class="slide-title a" style="--d:.15s">الآلية: من الصوت… إلى الولاء</h2>
+  <div class="ladder">
+    <div class="lstep a" style="--d:.25s;height:170px;background:#A1907A"><div class="n">١</div><h3>صوت ثابت</h3><p>نفس الشخصية<br>في كل قناة</p></div>
+    <div class="lstep a" style="--d:.4s;height:218px;background:#B4513E"><div class="n">٢</div><h3>تمييز</h3><p>يُعرَف وسط<br>الزحام</p></div>
+    <div class="lstep a" style="--d:.55s;height:266px;background:#D97706"><div class="n">٣</div><h3>ألفة</h3><p>يصير وجهاً<br>مألوفاً يومياً</p></div>
+    <div class="lstep a" style="--d:.7s;height:314px;background:#1E7A46"><div class="n">٤</div><h3>ثقة</h3><p>المألوف المتسق<br>يُصدَّق</p></div>
+    <div class="lstep a" style="--d:.85s;height:360px;background:#083528"><div class="n">٥</div><h3>ولاء</h3><p>يُختار<br>بلا مقارنة</p></div>
+  </div>
+  <p class="hook-sub a" style="--d:1.05s;margin-top:18px;font-size:21px">كل درجة تبنيها الكلمات… <b style="color:var(--orange)">والتذبذب يهدم السلم من أوله</b></p>
+</section>
+
+<!-- ═══════════ S10 الصوت × النبرة ═══════════ -->
+<section class="slide" data-name="الصوت والنبرة" style="padding-top:44px;justify-content:flex-start">
+  <div class="orn o3"></div>
+  <div class="title-row a" style="margin-top:4px"><div class="tline"></div><h2 class="slide-title">فرق مهم: الصوت × النبرة</h2><div class="tline"></div></div>
+  <div class="vt-grid">
+    <div class="vt voice a" style="--d:.25s">
+      <h3>🎙 الصوت Voice</h3>
+      <div class="sub">شخصيتك - ثابت لا يتغير</div>
+      <ul>
+        <li>من أنت وكيف تتكلم دائماً</li>
+        <li>مثل طبع الإنسان: يرافقه في كل المواقف</li>
+      </ul>
+    </div>
+    <div class="vt tone a" style="--d:.4s">
+      <h3>🎚 النبرة Tone</h3>
+      <div class="sub">مزاجك - تتكيف مع الموقف</div>
+      <ul>
+        <li>درجة الحماس والجدية حسب السياق</li>
+        <li>مثل مزاج الإنسان: يفرح ويجدّ ويهدأ</li>
+      </ul>
+    </div>
+  </div>
+  <div class="bubbles">
+    <div class="bb a" style="--d:.6s">
+      <div class="sit">🎉 نفس البراند - موقف تهنئة</div>
+      <p>«عيدكم مبارك يا أهل القهوة ☕ أول فنجان بالعيد… علينا»</p>
+    </div>
+    <div class="bb a" style="--d:.75s">
+      <div class="sit">😔 نفس البراند - رد على شكوى</div>
+      <p>«نعتذر منك، هذا مو مستوانا. رجّعنا المبلغ… وطلبك الجاي علينا»</p>
+    </div>
+  </div>
+  <p class="hook-sub a" style="--d:.95s;margin-top:16px;font-size:21.5px">نفس الشخصية الكريمة في الحالتين… <b style="color:var(--orange)">النبرة وحدها هي اللي تحركت</b></p>
+</section>
+
+<!-- ═══════════ S11 أرقام ═══════════ -->
+<section class="slide" data-name="أرقام تثبت">
+  <div class="orn o1"></div><div class="orn o4"></div>
+  <div class="kicker a">ليش نتعب على هالشي؟ 📊</div>
+  <h2 class="slide-title a" style="--d:.15s">الاتساق… يُترجم أرقاماً</h2>
+  <div class="stat-grid">
+    <div class="stat a" style="--d:.35s;--sc:#D97706">
+      <div class="v">+٢٠٪</div>
+      <h3>نموٌّ في الإيرادات مرتبط<br>بالعرض المتّسق للبراند</h3>
+      <span class="src">تقرير حالة اتساق البراند - Lucidpress/Marq</span>
+    </div>
+    <div class="stat a" style="--d:.55s;--sc:#1E7A46">
+      <div class="v">٥٩٪</div>
+      <h3>من المستهلكين يفضّلون الشراء<br>من براند مألوفٍ لديهم</h3>
+      <span class="src">مسح المستهلك العالمي - Nielsen</span>
+    </div>
+  </div>
+  <p class="hook-sub a" style="--d:.75s;margin-top:26px;font-size:21px">الصوت مو «لمسة جمالية»… <b style="color:var(--orange)">هو أصل تجاري يُبنى ويُقاس</b></p>
+</section>
+
+<!-- ═══════════ S12 عدسة التحليل ═══════════ -->
 <section class="slide" data-name="عدسة التحليل">
   <div class="orn o3"></div>
-  <div class="kicker a">الإطار النظري 🔍</div>
+  <div class="kicker a">أداة العمل 🔍</div>
   <h2 class="slide-title a" style="--d:.15s">عدسة تحليل الصوت - ٤ عناصر</h2>
   <div class="lens-grid">
     <div class="lens a" style="--d:.3s;--lc:#D97706">
@@ -367,20 +556,20 @@ html,body{height:100%;overflow:hidden}
       <p>وين يقف على الخط<br>بين الجدية والمزاح؟</p>
     </div>
   </div>
-  <p class="hook-sub a" style="--d:.95s;margin-top:28px">بهذه العدسة الواحدة… راح نحلل كل البراندات الجاية</p>
+  <p class="hook-sub a" style="--d:.95s;margin-top:28px">بهذه العدسة الواحدة… راح نحلل براندات عالمية، وبراندي أنا، وبراندك أنت</p>
 </section>
 
-<!-- ═══════════ S8 براندات عالمية ═══════════ -->
-<section class="slide" data-name="براندات عالمية" style="padding-top:44px;justify-content:flex-start">
+<!-- ═══════════ S13 براندات عالمية ═══════════ -->
+<section class="slide" data-name="براندات عالمية" style="padding-top:40px;justify-content:flex-start">
   <div class="orn o3"></div>
   <div class="title-row a" style="margin-top:4px"><div class="tline"></div><h2 class="slide-title">لو كان إنساناً… شنو طبعه؟</h2><div class="tline"></div></div>
-  <p class="hook-sub a" style="--d:.1s;margin-top:0;font-size:21px">حللوا معي - وبعد كل براند اسألوا: لو غيّر نبرته فجأة، وش بيصير؟</p>
-  <div class="fq-grid" style="grid-template-columns:repeat(4,1fr);width:1160px;height:300px">
+  <p class="hook-sub a" style="--d:.1s;margin-top:0;font-size:20px">حللوا بالعدسة الرباعية - وبعد كل براند: لو غيّر نبرته فجأة، وش بيصير؟</p>
+  <div class="fq-grid" style="grid-template-columns:repeat(4,1fr);width:1160px;height:290px">
     <div class="fq a" style="--d:.25s;--fc:#1E7A46">
       <div class="fq-inner">
         <div class="fq-face fq-front">
-          <div class="bn" style="font-family:Arial,'Sakkal Saad'">Duolingo</div>
-          <p class="bq">تطبيق تعلم اللغات<br>صاحب البومة الخضراء</p>
+          <img class="blogo" src="../assets/img/brands/duolingo.png" alt="Duolingo">
+          <div class="bq">تطبيق تعلم اللغات</div>
           <span class="hint">خمِّن ثم اضغط</span>
         </div>
         <div class="fq-face fq-back">
@@ -393,8 +582,8 @@ html,body{height:100%;overflow:hidden}
     <div class="fq a" style="--d:.4s;--fc:#083528">
       <div class="fq-inner">
         <div class="fq-face fq-front">
-          <div class="bn" style="font-family:Arial,'Sakkal Saad'">Apple</div>
-          <p class="bq">شركة التقنية<br>الأشهر في العالم</p>
+          <img class="blogo" src="../assets/img/brands/apple.png" alt="Apple" style="max-height:88px">
+          <div class="bq">شركة التقنية الأشهر</div>
           <span class="hint">خمِّن ثم اضغط</span>
         </div>
         <div class="fq-face fq-back">
@@ -407,42 +596,72 @@ html,body{height:100%;overflow:hidden}
     <div class="fq a" style="--d:.55s;--fc:#D97706">
       <div class="fq-inner">
         <div class="fq-face fq-front">
-          <div class="bn" style="font-family:Arial,'Sakkal Saad'">Innocent</div>
-          <p class="bq">عصائر طبيعية<br>بريطانية</p>
+          <img class="blogo" src="../assets/img/brands/almarai.png" alt="المراعي" style="max-height:110px">
+          <div class="bq">أكبر براند أغذية خليجي</div>
           <span class="hint">خمِّن ثم اضغط</span>
         </div>
         <div class="fq-face fq-back">
-          <div class="av">🍓</div>
-          <div class="nm">صديقك المرح</div>
-          <p class="tip">علاقة شخصية حميمة… حتى بمنتج بسيط زي العصير</p>
+          <div class="av">🥛</div>
+          <div class="nm">دافئ عائلي<br>«جودة تستاهل الثقة»</div>
+          <p class="tip">علاقة البيت والعائلة… حتى بمنتج يومي بسيط</p>
         </div>
       </div>
     </div>
     <div class="fq a" style="--d:.7s;--fc:#B4513E">
       <div class="fq-inner">
         <div class="fq-face fq-front">
-          <div class="bn">علامة فخمة</div>
-          <p class="bq">ساعات سويسرية<br>أو سيارات فارهة</p>
+          <img class="blogo" src="../assets/img/brands/rolex.png" alt="Rolex" style="max-height:70px">
+          <div class="bq">الساعات السويسرية الفاخرة</div>
           <span class="hint">خمِّن ثم اضغط</span>
         </div>
         <div class="fq-face fq-back">
-          <div class="av">⌚</div>
+          <div class="av">👑</div>
           <div class="nm">رسمي فخم<br>جمل قليلة موزونة</div>
           <p class="tip">الاختصار نفسه… أداة فخامة</p>
         </div>
       </div>
     </div>
   </div>
+  <div class="rights a" style="--d:.9s">✱ الشعارات المعروضة علاماتٌ تجارية مسجّلة محفوظة الحقوق لأصحابها - تُعرض هنا لغرضٍ تعليمي فقط</div>
 </section>
 
-<!-- ═══════════ S9 براندي أنا ═══════════ -->
+<!-- ═══════════ S14 تحليل شعاري ═══════════ -->
+<section class="slide" data-name="تحليل شعاري" style="padding-top:40px;justify-content:flex-start">
+  <div class="orn o3"></div>
+  <div class="title-row a" style="margin-top:0"><div class="tline"></div><h2 class="slide-title">قبل كلماتي… شعاري نفسه يتكلم</h2><div class="tline"></div></div>
+  <div class="anot a" style="--d:.2s">
+    <div class="logo-c a" style="--d:.3s;animation-name:pop"><img src="../assets/img/haydar-logo.png" alt="شعار حيدر"></div>
+    <div class="call a" style="--d:.5s;--ac:#B4513E;top:8px;right:20px">
+      <h4>✒️ سنّ القلم</h4>
+      <p>ريشة الخطاط بأعلى الشعار - الحِرفة والتراث ودقّة اليد</p>
+    </div>
+    <div class="call a" style="--d:.65s;--ac:#1E7A46;top:8px;left:20px">
+      <h4>💠 العقد والدوائر</h4>
+      <p>مسار نقاطٍ كأنه دائرة إلكترونية - التقنية والذكاء الاصطناعي</p>
+    </div>
+    <div class="call a" style="--d:.8s;--ac:#D97706;bottom:8px;right:20px">
+      <h4>〰️ الانسياب الخطي</h4>
+      <p>حروف «حيدر» بروح الخط العربي الحي - هوية عربية أصيلة</p>
+    </div>
+    <div class="call a" style="--d:.95s;--ac:#083528;bottom:8px;left:20px">
+      <h4>⭕ تكوينٌ واحد</h4>
+      <p>التراث والتقنية في جسدٍ واحد متزن - وهذا بالضبط صوتي</p>
+    </div>
+    <div class="cline" style="--ac:#B4513E;width:150px;top:80px;right:330px;transform:rotate(18deg)"></div>
+    <div class="cline" style="--ac:#1E7A46;width:150px;top:80px;left:330px;transform:rotate(-18deg)"></div>
+    <div class="cline" style="--ac:#D97706;width:150px;bottom:80px;right:330px;transform:rotate(-18deg)"></div>
+    <div class="cline" style="--ac:#083528;width:150px;bottom:80px;left:330px;transform:rotate(18deg)"></div>
+  </div>
+</section>
+
+<!-- ═══════════ S15 براندي أنا ═══════════ -->
 <section class="slide" data-name="براندي أنا">
   <div class="orn o2"></div><div class="orn o4"></div>
   <div class="kicker a">حالة نقاش حية 🎙</div>
   <h2 class="slide-title a" style="--d:.15s">براندي أنا… حللوني بنفس العدسة</h2>
   <div class="me-grid">
     <div class="me-card a" style="--d:.3s">
-      <img src="../assets/img/haydar.webp" alt="">
+      <div class="lbox"><img src="../assets/img/haydar-logo.png" alt="شعار حيدر"></div>
       <div class="nm">أ. حيدر المعاتيق</div>
       <div class="me-tags">
         <span>مدرب ذكاء اصطناعي</span><span>معلّم</span>
@@ -458,14 +677,14 @@ html,body{height:100%;overflow:hidden}
   </div>
 </section>
 
-<!-- ═══════════ S10 الخلاصة ═══════════ -->
+<!-- ═══════════ S16 الخلاصة ═══════════ -->
 <section class="slide" data-name="الخلاصة">
   <div class="orn o1"></div><div class="orn o4"></div>
   <h2 class="hook-big a">التحدي الحقيقي:<br>كيف يبان تنوّعك <em>عمقاً وقوة</em>…<br>لا تشتتاً</h2>
   <p class="hook-sub a" style="--d:.35s">الصوت الواحد ما يعني موضوعاً واحداً - يعني شخصيةً واحدة تجمع كل المواضيع</p>
 </section>
 
-<!-- ═══════════ S11 بطاقة هوية الصوت ═══════════ -->
+<!-- ═══════════ S17 بطاقة هوية الصوت ═══════════ -->
 <section class="slide" data-name="بطاقة هوية الصوت" style="padding-top:44px;justify-content:flex-start">
   <div class="orn o3"></div>
   <div class="title-row a" style="margin-top:4px"><div class="tline"></div><h2 class="slide-title">تمرينك: بطاقة هوية الصوت ✍️</h2><div class="tline"></div></div>
@@ -488,7 +707,7 @@ html,body{height:100%;overflow:hidden}
   </div>
 </section>
 
-<!-- ═══════════ S12 استراحة ═══════════ -->
+<!-- ═══════════ S18 استراحة ═══════════ -->
 <section class="slide" data-name="استراحة">
   <div class="orn o1"></div><div class="orn o2"></div><div class="orn o3"></div><div class="orn o4"></div>
   <div class="brk-cup a">☕</div>
@@ -496,7 +715,7 @@ html,body{height:100%;overflow:hidden}
   <p class="brk-sub a" style="--d:.4s">نرجع بعد ١٥ دقيقة - وبعدها إنتاج فعلي من أول دقيقة</p>
 </section>
 
-<!-- ═══════════ S13 أنواع المحتوى ═══════════ -->
+<!-- ═══════════ S19 أنواع المحتوى ═══════════ -->
 <section class="slide" data-name="أنواع المحتوى">
   <div class="orn o2"></div><div class="orn o3"></div>
   <div class="title-row a"><div class="tline"></div><h2 class="slide-title">مرجعك السريع - أنواع المحتوى</h2><div class="tline"></div></div>
@@ -510,7 +729,7 @@ html,body{height:100%;overflow:hidden}
   <p class="hook-sub a" style="--d:1s;margin-top:30px">كل واحد فيكم يختار <b style="color:var(--orange)">نوعاً واحداً فقط</b> يناسب مشروعه… ويطبّقه فعلياً لين آخر الساعة</p>
 </section>
 
-<!-- ═══════════ S14 التطبيق العملي ═══════════ -->
+<!-- ═══════════ S20 التطبيق العملي ═══════════ -->
 <section class="slide" data-name="التطبيق العملي">
   <div class="orn o1"></div><div class="orn o4"></div>
   <div class="kicker a">التطبيق العملي 💪</div>
@@ -526,7 +745,7 @@ html,body{height:100%;overflow:hidden}
   <p class="hook-sub a" style="--d:1.25s;margin-top:16px;font-size:21px">المطلوب بنهاية الوقت: <b style="color:var(--orange)">قطعة محتوى واحدة تقدر تنشرها اليوم</b></p>
 </section>
 
-<!-- ═══════════ S15 التصويت ═══════════ -->
+<!-- ═══════════ S21 التصويت ═══════════ -->
 <section class="slide" data-name="التصويت الحي" style="padding-top:44px;justify-content:flex-start">
   <div class="orn o2"></div><div class="orn o3"></div>
   <div class="title-row a" style="margin-top:4px"><div class="tline"></div><h2 class="slide-title">لحظة الحقيقة - تصويت الجمهور 🗳</h2><div class="tline"></div></div>
@@ -551,7 +770,7 @@ html,body{height:100%;overflow:hidden}
   </div>
 </section>
 
-<!-- ═══════════ S16 الختام ═══════════ -->
+<!-- ═══════════ S22 الختام ═══════════ -->
 <section class="slide" data-name="الختام">
   <div class="orn o1"></div><div class="orn o2"></div><div class="orn o3"></div><div class="orn o4"></div>
   <div class="close-logos a">
@@ -559,8 +778,8 @@ html,body{height:100%;overflow:hidden}
     <div class="dv"></div>
     <img src="../assets/img/gocode.png" alt="">
   </div>
-  <h1 class="close-title a" style="--d:.2s">صار لبراندك صوت</h1>
-  <p class="close-sub a" style="--d:.45s">بدأنا بنقاشٍ عن براندات عالمية…<br>وانتهينا وكل واحد فيكم بيده <em>محتوى حقيقي يتكلم بصوت مشروعه</em></p>
+  <h1 class="close-title a" style="--d:.2s">صارت هويتك تُسمَع</h1>
+  <p class="close-sub a" style="--d:.45s">فهمنا الصوت علمياً، وحللنا براندات عالمية…<br>وانتهينا وكل واحد فيكم بيده <em>محتوى حقيقي يتكلم بصوت مشروعه</em></p>
   <div class="close-tmw a" style="--d:.7s">بكرة: من قطعة محتوى واحدة… إلى <b>حملة متكاملة</b> 🚀</div>
 </section>
 
