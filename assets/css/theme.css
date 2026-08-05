@@ -1,0 +1,22 @@
+/* ثيمة دورة صناعة المحتوى بالذكاء الاصطناعي - براند حيدر المعاتيق */
+@font-face{font-family:'Sakkal Saad';src:url(../fonts/sakkalsaad-400.woff2) format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Sakkal Saad';src:url(../fonts/sakkalsaad-700.woff2) format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'Sakkal Saad';src:url(../fonts/sakkalsaad-800.woff2) format('woff2');font-weight:800;font-display:swap}
+@font-face{font-family:'Sakkal Saad Poster';src:url(../fonts/sakkalsaadposter-400.woff2) format('woff2');font-weight:400;font-display:swap}
+
+:root{
+  --cream:#FAF6EF; --card:#F3EDE1; --line:#D4C9B3; --orange:#D97706;
+  --green:#083528; --body:#3D514C; --muted:#A1907A;
+  --orange-soft:#F6E7CE; --green-soft:#DEE8E3;
+}
+*{margin:0;padding:0;box-sizing:border-box;font-synthesis:none}
+html,body{background:var(--cream);font-family:'Sakkal Saad',serif;color:var(--body)}
+
+@keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{opacity:0;transform:scale(.6)}70%{transform:scale(1.06)}100%{opacity:1;transform:scale(1)}}
+@keyframes growline{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes pulse-ring{0%{box-shadow:0 0 0 0 rgba(217,119,6,.35)}70%{box-shadow:0 0 0 18px rgba(217,119,6,0)}100%{box-shadow:0 0 0 0 rgba(217,119,6,0)}}
+@keyframes spin-slow{to{transform:rotate(360deg)}}
+
+.a{animation:rise .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,0s)}
