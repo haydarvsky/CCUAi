@@ -62,7 +62,7 @@ input:focus{outline:none;border-color:var(--orange)}
     <img src="../../assets/img/gocode.png" alt="GoCode">
   </div>
   <h1>تحكم <em>المدرب</em></h1>
-  <p>التصويت الحي ✦ اليوم الثاني</p>
+  <p id="sub">التصويت الحي</p>
 </header>
 
 <div class="card">
@@ -87,19 +87,23 @@ input:focus{outline:none;border-color:var(--orange)}
   <h2>نتيجة آخر جولة منتهية <span id="lr-tag" style="color:var(--orange)"></span></h2>
   <div class="res" id="lastres">
     <div id="lastres-empty">ستظهر بعد بدء الجولة الثانية</div>
-    <div class="rb yes" style="display:none"><div class="rl"><span>نعم بوضوح ✅</span><b>٠</b></div><div class="tr"><div class="fl"></div></div></div>
-    <div class="rb mid" style="display:none"><div class="rl"><span>جزئياً 🤔</span><b>٠</b></div><div class="tr"><div class="fl"></div></div></div>
-    <div class="rb no" style="display:none"><div class="rl"><span>لا ❌</span><b>٠</b></div><div class="tr"><div class="fl"></div></div></div>
+    <div class="rb yes" style="display:none"><div class="rl"><span class="olb"></span><b>٠</b></div><div class="tr"><div class="fl"></div></div></div>
+    <div class="rb mid" style="display:none"><div class="rl"><span class="olb"></span><b>٠</b></div><div class="tr"><div class="fl"></div></div></div>
+    <div class="rb no" style="display:none"><div class="rl"><span class="olb"></span><b>٠</b></div><div class="tr"><div class="fl"></div></div></div>
   </div>
   <div class="linkrow">
-    <a href="../screen/" target="_blank">🖥 الشاشة الحية</a>
-    <a href="../" target="_blank">📱 صفحة التصويت</a>
+    <a id="lnk-scr" href="../screen/" target="_blank">🖥 الشاشة الحية</a>
+    <a id="lnk-vote" href="../" target="_blank">📱 صفحة التصويت</a>
   </div>
   <button id="wipe">🗑 مسح كل الأصوات وإنهاء الجولات</button>
 </div>
 
 <script src="../config.js"></script>
 <script>
+document.getElementById('sub').textContent='التصويت الحي ✦ '+(V_PRESET_KEY==='launch'?'اليوم الرابع':'اليوم الثاني');
+document.getElementById('lnk-scr').href='../screen/'+V_QS;
+document.getElementById('lnk-vote').href='../'+V_QS;
+document.querySelectorAll('.olb').forEach((el,i)=>el.textContent=V_P.OPTS[i].label);
 const AR=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
 let round=0;
 const msg=document.getElementById('msg');

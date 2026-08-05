@@ -80,7 +80,7 @@ header .sub{color:var(--muted);font-size:15px;font-weight:700}
   </div>
   <div>
     <h1>تصويت <em>الجمهور الحي</em></h1>
-    <div class="sub">هل المحتوى يعكس هوية الصوت؟ ✦ اليوم الثاني</div>
+    <div class="sub" id="sub"></div>
   </div>
   <div id="status"><span class="dot"></span><span id="stxt">مباشر</span></div>
 </header>
@@ -89,7 +89,7 @@ header .sub{color:var(--muted);font-size:15px;font-weight:700}
   <span id="round-tag">الجولة ٠</span>
   <div id="p-name">-</div>
   <div id="p-title"></div>
-  <div id="p-q">هل هذا المحتوى يعكس فعلاً هوية الصوت المكتوبة؟</div>
+  <div id="p-q"></div>
 </div>
 
 <div id="nostate">
@@ -101,17 +101,17 @@ header .sub{color:var(--muted);font-size:15px;font-weight:700}
   <div class="col yes" data-c="yes">
     <div class="cnt">٠</div><div class="pct">٠٪</div>
     <div class="barv" style="height:4%"></div>
-    <div class="lbl"><span class="win">👑</span>نعم بوضوح ✅</div>
+    <div class="lbl"><span class="win">👑</span><span class="lt"></span></div>
   </div>
   <div class="col mid" data-c="mid">
     <div class="cnt">٠</div><div class="pct">٠٪</div>
     <div class="barv" style="height:4%"></div>
-    <div class="lbl"><span class="win">👑</span>جزئياً 🤔</div>
+    <div class="lbl"><span class="win">👑</span><span class="lt"></span></div>
   </div>
   <div class="col no" data-c="no">
     <div class="cnt">٠</div><div class="pct">٠٪</div>
     <div class="barv" style="height:4%"></div>
-    <div class="lbl"><span class="win">👑</span>لا ❌</div>
+    <div class="lbl"><span class="win">👑</span><span class="lt"></span></div>
   </div>
 </div>
 
@@ -124,6 +124,9 @@ header .sub{color:var(--muted);font-size:15px;font-weight:700}
 <script src="../config.js"></script>
 <script>
 const DEMO=new URLSearchParams(location.search).has('demo');
+document.getElementById('p-q').textContent=V_P.Q;
+document.getElementById('sub').textContent=V_P.Q+' ✦ '+(V_PRESET_KEY==='launch'?'اليوم الرابع':'اليوم الثاني');
+document.querySelectorAll('.col .lt').forEach((el,i)=>el.textContent=V_P.OPTS[i].label);
 const AR=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
 let round=null,counts={yes:0,mid:0,no:0};
 
